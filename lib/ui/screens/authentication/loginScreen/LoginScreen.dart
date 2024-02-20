@@ -8,6 +8,7 @@ import 'package:smart_clinic_for_psychiatry/ui/common/components/customTextFormF
 import 'package:smart_clinic_for_psychiatry/ui/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/loginScreen/LoginScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/registerScreen/RegisterScreen.dart';
+import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/homeScreen/HomeScreen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -181,7 +182,11 @@ class LoginScreen extends StatelessWidget {
                           color: MyTheme.whiteColor),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, ResetPasswordScreen.routeName);
+
+                      },
                       child: Text(
                         'reset password',
                         style: TextStyle(
