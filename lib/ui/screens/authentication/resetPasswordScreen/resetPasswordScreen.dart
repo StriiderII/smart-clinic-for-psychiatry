@@ -4,13 +4,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_clinic_for_psychiatry/ui/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/ui/common/components/customTextFormField/CustomTextFormField.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/loginScreen/LoginScreen.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/registerScreen/RegisterScreen.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
+
+class ResetPasswordScreen extends StatefulWidget {
   static const String routeName = 'forgot password screen';
 
   const ResetPasswordScreen({super.key});
 
+  @override
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
