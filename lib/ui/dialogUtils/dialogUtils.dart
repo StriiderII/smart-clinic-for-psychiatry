@@ -70,7 +70,7 @@ class DialogUtils {
           return AlertDialog(
             content: Text(
               message,
-              style: TextStyle(fontSize: 18.sp),
+              style: TextStyle(fontSize: 24.sp),
             ),
             actions: actions,
           );
