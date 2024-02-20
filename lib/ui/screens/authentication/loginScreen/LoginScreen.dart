@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,12 +10,18 @@ import 'package:smart_clinic_for_psychiatry/ui/common/components/customTextFormF
 import 'package:smart_clinic_for_psychiatry/ui/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/loginScreen/LoginScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/registerScreen/RegisterScreen.dart';
+import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/homeScreen/HomeScreen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static const String routeName = 'login screen';
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   var viewModel = getIt<LoginViewModel>();
 
   @override
@@ -39,25 +47,11 @@ class LoginScreen extends StatelessWidget {
             }
           case LoginSuccessState():
             {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Logged In Successfully'),
-                    content: Text('Logged In Successfully\n${state.user.email}'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, HomeScreen.routeName); // Replace 'HomeScreen.routeName' with the actual route name of your home screen
-                        },
-                        child: Text('OK'),
-                      ),
-                    ],
-                  );
-                },
-              );
-              break;
+              DialogUtils.showMessage(context, 'Logged in successfully',);
+
+              Timer(const Duration(seconds: 1), () {
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              });
             }
 
           case InitialState():
@@ -68,7 +62,7 @@ class LoginScreen extends StatelessWidget {
         backgroundColor: MyTheme.primaryLight,
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -89,7 +83,6 @@ class LoginScreen extends StatelessWidget {
                         'Welcome Back To Smart Clinic For Psychiatry',
                         style: TextStyle(
                             fontSize: 24.sp,
-
                             fontWeight: FontWeight.w600,
                             color: MyTheme.whiteColor),
                       ),
@@ -116,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                         return 'Please enter a valid e-mail';
                       }
                       bool emailValid = RegExp(
-                          r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(text);
                       if (!emailValid) {
                         return 'Please enter a valid email';
@@ -181,7 +174,10 @@ class LoginScreen extends StatelessWidget {
                           color: MyTheme.whiteColor),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, ResetPasswordScreen.routeName);
+                      },
                       child: Text(
                         'reset password',
                         style: TextStyle(
@@ -203,10 +199,10 @@ class LoginScreen extends StatelessWidget {
                         backgroundColor: MaterialStateProperty.all<Color>(
                             MyTheme.backgroundButtonColor),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.symmetric(vertical: 12),
+                          const EdgeInsets.symmetric(vertical: 12),
                         ),
                         shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
