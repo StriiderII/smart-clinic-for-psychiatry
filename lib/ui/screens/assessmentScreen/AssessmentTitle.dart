@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_clinic_for_psychiatry/ui/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/assessmentScreen/Questions.dart';
 import 'package:smart_clinic_for_psychiatry/ui/screens/quizScreen/QuizScreen.dart';
@@ -27,14 +28,14 @@ class AssessmentTile extends StatelessWidget {
       },
       child: ListTile(
         title: Center(child: Text(title, style: TextStyle(
-          fontSize: 20,
+          fontSize: 20.sp,
           fontWeight: FontWeight.w500,
           color: MyTheme.darkPinkColor
         ))),
         tileColor: MyTheme.backgroundButtonColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: MyTheme.primaryLight, width: 1,style: BorderStyle.solid),
+          side: BorderSide(color: MyTheme.primaryLight, width: 1.w,style: BorderStyle.solid),
         ),
       ),
     );

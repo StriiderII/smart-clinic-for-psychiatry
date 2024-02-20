@@ -78,7 +78,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                     'Choose self-assessment test based on the following disorders',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       color: MyTheme.primaryLight,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
@@ -126,19 +126,9 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.only(top: 50, left: 40),
+      padding: const EdgeInsets.only(top: 80, left: 80),
       child: Row(
         children: [
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: MyTheme.primaryLight,
-              size: 40,
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed(HomeScreen.routeName);
-            },
-          ),
           SizedBox(
             width: 5.w,
           ),

@@ -65,24 +65,15 @@ class _NewsScreenState extends State<NewsScreen> {
 
               return Column(
                 children: [
-                  SizedBox(height: 50.h),
+                  SizedBox(height: 100.h),
                   Row(
                     children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: MyTheme.whiteColor,
-                          size: 40,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(HomeScreen.routeName);
-                        },
-                      ),
-                      SizedBox(width: 70.w),
+
+                      SizedBox(width: 125.w),
                       Image.asset('assets/images/articles_font.png'),
                     ],
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 30.h),
                   Container(
                     width: 450.w,
                     height: 80.h,
