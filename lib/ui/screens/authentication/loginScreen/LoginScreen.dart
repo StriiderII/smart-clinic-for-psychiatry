@@ -88,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                       Text(
                         'Welcome Back To Smart Clinic For Psychiatry',
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24.sp,
 
                             fontWeight: FontWeight.w600,
                             color: MyTheme.whiteColor),
@@ -96,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                       Text(
                         'Please sign in with your e-mail',
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w300,
                             color: MyTheme.whiteColor),
                       ),
@@ -148,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                     Text(
                       'Dont have an account?',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w500,
                           color: MyTheme.whiteColor),
                     ),
@@ -163,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                             decoration: TextDecoration.underline,
                             decorationThickness: 2,
                             decorationColor: MyTheme.whiteColor,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
                             color: MyTheme.whiteColor),
                       ),
@@ -176,7 +176,7 @@ class LoginScreen extends StatelessWidget {
                     Text(
                       'Forgot your password?',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w500,
                           color: MyTheme.whiteColor),
                     ),
@@ -188,7 +188,7 @@ class LoginScreen extends StatelessWidget {
                             decoration: TextDecoration.underline,
                             decorationThickness: 2,
                             decorationColor: MyTheme.whiteColor,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
                             color: MyTheme.whiteColor),
                       ),

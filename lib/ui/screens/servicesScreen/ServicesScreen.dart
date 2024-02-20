@@ -32,7 +32,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 'How are you feeling today ?',
                 style: GoogleFonts.poppins(
                   color: Color(0xff371B34),
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -55,7 +55,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               Text(
                 'Vitals',
                 style: GoogleFonts.poppins(
-                  fontSize: 30,
+                  fontSize: 30.sp,
                 ),
               ),
               Vitals(),

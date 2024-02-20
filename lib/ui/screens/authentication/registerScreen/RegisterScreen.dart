@@ -80,7 +80,7 @@ class RegisterScreen extends StatelessWidget {
                         Text(
                           '🎉 Welcome to our vibrant community of Smart Clinic For Psychiatry',
                           style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 24.sp,
 
                               fontWeight: FontWeight.w600,
                               color: MyTheme.whiteColor),
@@ -88,7 +88,7 @@ class RegisterScreen extends StatelessWidget {
                         Text(
                           'Feel free to Sign Up and join us on our exciting journey',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w300,
                               color: MyTheme.whiteColor),
                         ),
@@ -191,7 +191,7 @@ class RegisterScreen extends StatelessWidget {
                       Text(
                         'Already have an account?',
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
                             color: MyTheme.whiteColor),
                       ),
@@ -206,7 +206,7 @@ class RegisterScreen extends StatelessWidget {
                               decoration: TextDecoration.underline,
                               decorationThickness: 2,
                               decorationColor: Colors.white,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w500,
                               color: MyTheme.whiteColor),
                         ),

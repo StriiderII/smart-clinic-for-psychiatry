@@ -17,6 +17,7 @@ import 'package:smart_clinic_for_psychiatry/ui/screens/userRoleScreen/UserRoleSc
 import 'firebase_options.dart';
 import 'ui/screens/assessmentScreen/AssessmentScreen.dart';
 import 'ui/screens/authentication/loginScreen/LoginScreen.dart';
+import 'ui/screens/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'ui/screens/chatScreen/ChatScreen.dart';
 import 'ui/screens/settingsScreen/SettingsScreen.dart';
 
@@ -27,7 +28,7 @@ Future<void> main() async {
 
   String? cache = CasheHelper.getData('news');
   String startWidget =
-      cache != null ? HomeScreen.routeName : HomeScreen.routeName;
+      cache != null ? ResetPasswordScreen.routeName : ResetPasswordScreen.routeName;
 
   runApp(
     MyApp(
@@ -73,6 +74,8 @@ class MyApp extends StatelessWidget {
             SettingsScreen.routeName: (context) => SettingsScreen(),
             AssessmentScreen.routeName: (context) => const AssessmentScreen(),
             ChatScreen.routeName: (context) => const ChatScreen(),
+            ResetPasswordScreen.routeName: (context) => const ResetPasswordScreen(),
+
           },
           initialRoute: startWidget,
         ),

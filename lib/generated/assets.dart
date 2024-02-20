@@ -27,11 +27,14 @@ class Assets {
   static const String imagesIntroPage = 'assets/images/Intro_page.png';
   static const String imagesIntroPage2 = 'assets/images/Intro_page2.png';
   static const String imagesIntroPage3 = 'assets/images/Intro_page3.png';
+  static const String imagesLanguageFont = 'assets/images/language_font.png';
   static const String imagesPatient = 'assets/images/patient.png';
   static const String imagesPatientFont = 'assets/images/patient_font.png';
   static const String imagesPatientFramed = 'assets/images/patient_framed.png';
   static const String imagesRelax = 'assets/images/relax.png';
+  static const String imagesResetPasswordFont = 'assets/images/reset_password_font.png';
   static const String imagesSettings = 'assets/images/settings.png';
+  static const String imagesSettingsFont = 'assets/images/settings_font.png';
   static const String imagesSettingsPage = 'assets/images/settings_page.png';
   static const String imagesSigninFont = 'assets/images/signin_font.png';
   static const String imagesSignupFont = 'assets/images/signup_font.png';
@@ -39,6 +42,7 @@ class Assets {
   static const String imagesSteps = 'assets/images/steps.png';
   static const String imagesSystolic = 'assets/images/systolic.png';
   static const String imagesTemp = 'assets/images/temp.png';
+  static const String imagesThemeFont = 'assets/images/theme_font.png';
   static const String imagesUser = 'assets/images/User.png';
   static const String imagesYouAreAFont = 'assets/images/YouAreA_font.png';
 
