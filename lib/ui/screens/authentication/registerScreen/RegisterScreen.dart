@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,11 +10,16 @@ import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/loginScree
 import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/registerScreen/RegisterScreenViewModel.dart';
 import 'package:animate_do/animate_do.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   static const String routeName = 'register screen';
 
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   var viewModel = getIt<RegisterViewModel>();
 
   var formKey = GlobalKey<FormState>();
@@ -41,14 +47,11 @@ class RegisterScreen extends StatelessWidget {
             }
           case RegisterSuccessState():
             {
-              DialogUtils.showMessage(
-                  context,
-                  'Registered Successfully\n',
-                  posActionName: 'ok',
-                 posAction: () {
-                    Navigator.pushReplacementNamed(
-                        context, LoginScreen.routeName);
-                  });
+              DialogUtils.showMessage(context, 'Registered successfully',);
+
+              Timer(const Duration(seconds: 1), () {
+                Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+              });
             }
           case InitialState():
         }
@@ -81,7 +84,6 @@ class RegisterScreen extends StatelessWidget {
                           '🎉 Welcome to our vibrant community of Smart Clinic For Psychiatry',
                           style: TextStyle(
                               fontSize: 24.sp,
-
                               fontWeight: FontWeight.w600,
                               color: MyTheme.whiteColor),
                         ),
@@ -213,7 +215,6 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   BounceInUp(
                     child: Padding(
                       padding: const EdgeInsets.all(50),
@@ -221,10 +222,12 @@ class RegisterScreen extends StatelessWidget {
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               MyTheme.backgroundButtonColor),
-                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(vertical: 12),
+                          padding:
+                          MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            const EdgeInsets.symmetric(vertical: 12),
                           ),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
@@ -244,7 +247,6 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DialogUtils {
   static void showLoading(BuildContext context, String message,
@@ -15,7 +16,7 @@ class DialogUtils {
               ),
               Text(
                 message,
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18.sp),
               ),
             ],
           ),
@@ -44,7 +45,7 @@ class DialogUtils {
         },
         child: Text(
           posActionName,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18.sp),
         ),
       ));
     }
@@ -57,7 +58,7 @@ class DialogUtils {
         },
         child: Text(
           negActionName,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18.sp),
         ),
       ));
     }
@@ -69,7 +70,7 @@ class DialogUtils {
           return AlertDialog(
             content: Text(
               message,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18.sp),
             ),
             actions: actions,
           );
