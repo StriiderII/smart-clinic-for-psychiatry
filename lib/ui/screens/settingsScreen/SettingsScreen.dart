@@ -113,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 20.sp),
+            style: TextStyle(fontSize: 24.sp),
           ),
           Spacer(),
           Icon(Icons.navigate_next),
