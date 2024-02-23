@@ -8,7 +8,7 @@ class LoginUseCase{
   AuthenticationRepository repository;
   @factoryMethod LoginUseCase(this.repository);
 
-  Future<User?>invoke(String email, String password){
-    return repository.login(email, password);
+  Future<User?>invoke(String email, String password, String role){
+    return repository.login(email, password, role);
   }
 }
