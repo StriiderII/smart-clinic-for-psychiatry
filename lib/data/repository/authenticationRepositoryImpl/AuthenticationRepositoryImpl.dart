@@ -4,24 +4,33 @@ import 'package:smart_clinic_for_psychiatry/data/datasourceContracts/authenticat
 import 'package:smart_clinic_for_psychiatry/domain/repository/authenticationRepository/AuthenticationRepository.dart';
 
 @Injectable(as: AuthenticationRepository)
-class AuthenticationRepositoryImpl extends AuthenticationRepository{
+class AuthenticationRepositoryImpl extends AuthenticationRepository {
   AuthenticationDataSource authenticationOnlineDataSource;
-  @factoryMethod AuthenticationRepositoryImpl(this.authenticationOnlineDataSource);
+
+  @factoryMethod
+  AuthenticationRepositoryImpl(this.authenticationOnlineDataSource);
+
+  @override
   Future<User?> register(
       String name,
       String email,
       String password,
       String passwordVerification,
       String phone,
-      String role) {
-      return authenticationOnlineDataSource.register(
-          name, email, password, passwordVerification, phone, role);
+      String role,
+      ) {
+    return authenticationOnlineDataSource.register(
+      name,
+      email,
+      password,
+      passwordVerification,
+      phone,
+      role, // Pass role to the data source
+    );
   }
 
-  Future<User?> login(String email, String password) {
-    return authenticationOnlineDataSource.login(email, password);
+  @override
+  Future<User?> login(String email, String password, String role) {
+    return authenticationOnlineDataSource.login(email, password, role);
   }
-
 }
-
-

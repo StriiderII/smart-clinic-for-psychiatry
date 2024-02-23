@@ -12,12 +12,15 @@ class Assets {
   static const String imagesBloodOxygen = 'assets/images/blood_oxygen.png';
   static const String imagesBottomArrow = 'assets/images/bottom_arrow.png';
   static const String imagesCalm = 'assets/images/calm.png';
+  static const String imagesChangePasswordFont = 'assets/images/change_password_font.png';
   static const String imagesChat = 'assets/images/chat.png';
   static const String imagesConfirm = 'assets/images/confirm.png';
   static const String imagesDiastolic = 'assets/images/diastolic.png';
   static const String imagesDoctor = 'assets/images/doctor.png';
   static const String imagesDoctorFont = 'assets/images/doctor_font.png';
   static const String imagesDoctorFramed = 'assets/images/doctor_framed.png';
+  static const String imagesEditProfileFont = 'assets/images/edit_profile_font.png';
+  static const String imagesEditProfileIcon = 'assets/images/edit_profile_icon.png';
   static const String imagesFindYourSpecialistLight = 'assets/images/find_your_specialist_light.png';
   static const String imagesFocus = 'assets/images/focus.png';
   static const String imagesHappy = 'assets/images/happy.png';

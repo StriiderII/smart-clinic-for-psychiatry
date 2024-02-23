@@ -4,22 +4,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_clinic_for_psychiatry/data/API/CasheHelper.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
-import 'package:smart_clinic_for_psychiatry/ui/MyBlocObserver.dart';
-import 'package:smart_clinic_for_psychiatry/ui/common/components/appTheme/my_theme.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/authentication/registerScreen/RegisterScreen.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/homeScreen/HomeScreen.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/newsScreen/screens/NewsScreen.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/newsScreen/logic/Cubit/NewCubit.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/newsScreen/logic/Cubit/SearchCubit.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/onBoardScreen/onBoardScreen.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/splashScreen/SplashScreen.dart';
-import 'package:smart_clinic_for_psychiatry/ui/screens/userRoleScreen/UserRoleScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/MyBlocObserver.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/chatScreen/ChatScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/SettingsScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/logic/cubit/NewCubit.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/screens/NewsScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/onBoardScreen/onBoardScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/assessmentScreen/AssessmentScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/chatScreen/ChatScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/splashScreen/SplashScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
 import 'firebase_options.dart';
-import 'ui/screens/assessmentScreen/AssessmentScreen.dart';
-import 'ui/screens/authentication/loginScreen/LoginScreen.dart';
-import 'ui/screens/authentication/resetPasswordScreen/resetPasswordScreen.dart';
-import 'ui/screens/chatScreen/ChatScreen.dart';
-import 'ui/screens/settingsScreen/SettingsScreen.dart';
+import 'presentation/newsScreen/logic/cubit/SearchCubit.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +31,7 @@ Future<void> main() async {
 
   String? cache = CasheHelper.getData('news');
   String startWidget =
-      cache != null ? ResetPasswordScreen.routeName : ResetPasswordScreen.routeName;
+      cache != null ? LoginScreen.routeName : LoginScreen.routeName;
 
   runApp(
     MyApp(
@@ -66,15 +69,17 @@ class MyApp extends StatelessWidget {
           routes: {
             SplashScreen.routeName: (_) => SplashScreen(),
             OnBoardingScreen.routeName: (_) => const OnBoardingScreen(),
-            LoginScreen.routeName: (_) => LoginScreen(),
-            RegisterScreen.routeName: (_) => RegisterScreen(),
-            UserRoleScreen.routeName: (_) => UserRoleScreen(),
+            /*UserRoleScreen.routeName: (_) => const UserRoleScreen(),*/
             HomeScreen.routeName: (_) => HomeScreen(),
+            HomeScreenDoctor.routeName: (_) => const HomeScreenDoctor(),
             NewsScreen.routeName: (_) => const NewsScreen(),
             SettingsScreen.routeName: (context) => SettingsScreen(),
+            SettingsScreenDoctor.routeName: (context) => SettingsScreenDoctor(),
             AssessmentScreen.routeName: (context) => const AssessmentScreen(),
             ChatScreen.routeName: (context) => const ChatScreen(),
-            ResetPasswordScreen.routeName: (context) => const ResetPasswordScreen(),
+            ChatScreenDoctor.routeName: (context) => const ChatScreenDoctor(),
+            RegisterScreen.routeName: (context) => const RegisterScreen(),
+            LoginScreen.routeName:(context) => const LoginScreen(userRole: ''),
 
           },
           initialRoute: startWidget,

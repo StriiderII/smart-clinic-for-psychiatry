@@ -11,5 +11,5 @@ abstract class AuthenticationDataSource {
       );
   Future<User?> login(
       String email,
-      String password);
+      String password, String role);
 }

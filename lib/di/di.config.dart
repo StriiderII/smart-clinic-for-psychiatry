@@ -13,20 +13,21 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../data/database/FirebaseUtils.dart' as _i3;
 import '../data/datasource/athenticationOnlineDataSource/AuthenticationOnlineDataSource.dart'
-    as _i6;
-import '../data/datasourceContracts/authenticationDataSource/AuthenticationDataSource.dart'
-    as _i5;
-import '../data/repository/authenticationRepositoryImpl/AuthenticationRepositoryImpl.dart'
-    as _i8;
-import '../domain/repository/authenticationRepository/AuthenticationRepository.dart'
     as _i7;
-import '../domain/usecase/LoginUseCase.dart' as _i9;
-import '../domain/usecase/RegisterUseCase.dart' as _i11;
-import '../ui/screens/authentication/loginScreen/LoginScreenViewModel.dart'
-    as _i10;
-import '../ui/screens/authentication/registerScreen/RegisterScreenViewModel.dart'
-    as _i12;
-import '../ui/screens/homeScreen/HomeScreenViewModel.dart' as _i4;
+import '../data/datasourceContracts/authenticationDataSource/AuthenticationDataSource.dart'
+    as _i6;
+import '../data/repository/authenticationRepositoryImpl/AuthenticationRepositoryImpl.dart'
+    as _i9;
+import '../domain/repository/authenticationRepository/AuthenticationRepository.dart'
+    as _i8;
+import '../domain/usecase/LoginUseCase.dart' as _i10;
+import '../domain/usecase/RegisterUseCase.dart' as _i12;
+import '../presentation/authentication/loginScreen/LoginScreenViewModel.dart'
+    as _i11;
+import '../presentation/authentication/registerScreen/RegisterScreenViewModel.dart'
+    as _i13;
+import '../presentation/doctorSide/homeScreen/HomeScreenViewModel.dart' as _i5;
+import '../presentation/patientSide/homeScreen/HomeScreenViewModel.dart' as _i4;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -41,18 +42,19 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.factory<_i3.FirebaseUtils>(() => _i3.FirebaseUtils());
     gh.factory<_i4.HomeViewModel>(() => _i4.HomeViewModel());
-    gh.factory<_i5.AuthenticationDataSource>(
-        () => _i6.AuthenticationOnlineDataSource(gh<_i3.FirebaseUtils>()));
-    gh.factory<_i7.AuthenticationRepository>(() =>
-        _i8.AuthenticationRepositoryImpl(gh<_i5.AuthenticationDataSource>()));
-    gh.factory<_i9.LoginUseCase>(
-        () => _i9.LoginUseCase(gh<_i7.AuthenticationRepository>()));
-    gh.factory<_i10.LoginViewModel>(
-        () => _i10.LoginViewModel(gh<_i9.LoginUseCase>()));
-    gh.factory<_i11.RegisterUseCase>(
-        () => _i11.RegisterUseCase(gh<_i7.AuthenticationRepository>()));
-    gh.factory<_i12.RegisterViewModel>(
-        () => _i12.RegisterViewModel(gh<_i11.RegisterUseCase>()));
+    gh.factory<_i5.HomeViewModelDoctor>(() => _i5.HomeViewModelDoctor());
+    gh.factory<_i6.AuthenticationDataSource>(
+        () => _i7.AuthenticationOnlineDataSource(gh<_i3.FirebaseUtils>()));
+    gh.factory<_i8.AuthenticationRepository>(() =>
+        _i9.AuthenticationRepositoryImpl(gh<_i6.AuthenticationDataSource>()));
+    gh.factory<_i10.LoginUseCase>(
+        () => _i10.LoginUseCase(gh<_i8.AuthenticationRepository>()));
+    gh.factory<_i11.LoginViewModel>(
+        () => _i11.LoginViewModel(gh<_i10.LoginUseCase>()));
+    gh.factory<_i12.RegisterUseCase>(
+        () => _i12.RegisterUseCase(gh<_i8.AuthenticationRepository>()));
+    gh.factory<_i13.RegisterViewModel>(
+        () => _i13.RegisterViewModel(gh<_i12.RegisterUseCase>()));
     return this;
   }
 }
