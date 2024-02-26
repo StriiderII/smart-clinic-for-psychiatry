@@ -1,73 +1,70 @@
-import 'dart:async';
-
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_clinic_for_psychiatry/di/di.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreenViewModel.dart';
+import 'package:smart_clinic_for_psychiatry/data/database/variables.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/login_controller.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/customTextFormField/CustomTextFormField.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
-
+import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/selection/model/selection_model.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/selection/view/selection_view.dart';
+import 'package:smart_clinic_for_psychiatry/domain/model/authenticationModel/UserAuthenticationModel.dart'
+as auth;
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'login screen';
-  final String userRole;
 
-  const LoginScreen({super.key, required this.userRole});
-
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var viewModel = getIt<LoginViewModel>();
+  final viewModel = LoginViewModel();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginViewModel, LoginViewState>(
-      listenWhen: (old, newState) {
-        if (old is LoadingState && newState is! LoadingState) {
+      listener: (context, state) {
+        if (state.status == LoginStatus.loading) {
+          DialogUtils.showLoading(context, 'Loading..');
+        } else {
           DialogUtils.hideLoading(context);
         }
-        if (newState is InitialState) return false;
-        return true;
-      },
-      listener: (context, state) {
-        switch (state) {
-          case ErrorState():
-            {
-              DialogUtils.showMessage(context, state.message ?? "",
-                  posActionName: 'Ok');
-            }
-          case LoadingState():
-            {
-              DialogUtils.showLoading(context, 'Loading..');
-            }
-          case LoginSuccessState():
-            {
-              DialogUtils.showMessage(context, 'Logged in successfully');
-
-              Timer(const Duration(seconds: 1), () {
-                // Determine the user's role and navigate accordingly
-                if (widget.userRole == 'Doctor') {
-                  Navigator.pushReplacementNamed(context, HomeScreenDoctor.routeName);
-                } else if (widget.userRole == 'Patient') {
-                  Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-                } else {
-                  // Handle other roles or scenarios
-                }
+        if (state.status == LoginStatus.error) {
+          DialogUtils.showMessage(context, state.errorMessage ?? "", posActionName: 'Ok');
+        }
+        if (state.status == LoginStatus.success) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              Future.delayed(const Duration(seconds: 1), () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      if (userType == Selection.patient) {
+                        return HomeScreen();
+                      } else if (userType == Selection.doctor) {
+                        return HomeScreenDoctor();
+                      } else {
+                        // Handle other user types if necessary
+                        return SelectionView();
+                      }
+                    },
+                  ),
+                );
               });
-            }
-
-
-          case InitialState():
+              return AlertDialog(
+                title: const Text('Logged In Successfully'),
+              );
+            },
+          );
         }
       },
       bloc: viewModel,
@@ -76,24 +73,23 @@ class _LoginScreenState extends State<LoginScreen> {
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: 70.h,
-                ),
-                BounceInDown(
-                  child: Image.asset('assets/images/signin_font.png'),
-                ),
-                SizedBox(
-                  height: 70.h,
-                ),
-                FadeInLeft(
-                  child: Column(
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 70.h,
+                  ),
+                  Image.asset('assets/images/signin_font.png'),
+                  SizedBox(
+                    height: 70.h,
+                  ),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome back to Smart Clinic for Psychiatry',
+                        'Welcome Back To Smart Clinic For Psychiatry',
                         style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.w600,
@@ -108,14 +104,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                BounceInUp(
-                  child: CustomFormField(
+                  SizedBox(
+                    height: 40.h,
+                  ),
+                  CustomFormField(
                     label: 'Email',
-                    hint: 'Enter your email',
+                    hint: 'Enter your Email',
                     controller: viewModel.emailController,
                     validator: (text) {
                       if (text == null || text.trim().isEmpty) {
@@ -130,11 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                   ),
-                ),
-                BounceInUp(
-                  child: CustomFormField(
+                  CustomFormField(
                     label: 'Password',
-                    hint: 'Enter your password',
+                    hint: 'Enter your Password',
                     controller: viewModel.passwordController,
                     secureText: true,
                     validator: (text) {
@@ -147,79 +139,73 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Dont have an account?',
-                      style: TextStyle(
+                  userType == Selection.patient
+                      ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account?',
+                        style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w500,
-                          color: MyTheme.whiteColor),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'sign up',
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            decorationThickness: 1,
-                            decorationColor: MyTheme.whiteColor,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                            color: MyTheme.whiteColor),
+                          color: MyTheme.whiteColor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Forgot your password?',
-                      style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w500,
-                          color: MyTheme.whiteColor),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ResetPasswordScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'reset password',
-                        style: TextStyle(
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            RegisterScreen.routeName,
+                          );
+                        },
+                        child: Text(
+                          'sign up',
+                          style: TextStyle(
                             decoration: TextDecoration.underline,
                             decorationThickness: 2,
                             decorationColor: MyTheme.whiteColor,
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
+                            color: MyTheme.whiteColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                      : const SizedBox(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Forgot your password?',
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w500,
                             color: MyTheme.whiteColor),
                       ),
-                    ),
-                  ],
-                ),
-                BounceInUp(
-                  child: Padding(
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'reset password',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationThickness: 2,
+                              decorationColor: MyTheme.whiteColor,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w500,
+                              color: MyTheme.whiteColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
                     padding: const EdgeInsets.all(50),
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             MyTheme.backgroundButtonColor),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        padding:
+                        MaterialStateProperty.all<EdgeInsetsGeometry>(
                           const EdgeInsets.symmetric(vertical: 12),
                         ),
                         shape:
@@ -229,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: ()  {
                         login();
                       },
                       child: const Text(
@@ -242,8 +228,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -252,6 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void login() {
+    if (formKey.currentState?.validate() == false) return;
     viewModel.login();
   }
 }

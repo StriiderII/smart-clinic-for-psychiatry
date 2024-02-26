@@ -14,7 +14,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScr
 
 
 class HomeScreen extends StatefulWidget {
-  static const String routeName = 'test screen';
+  static const String routeName = '/home_screen';
 
   HomeScreen({Key? key}) : super(key: key);
 
