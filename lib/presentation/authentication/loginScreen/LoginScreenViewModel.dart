@@ -1,3 +1,4 @@
+/*
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:smart_clinic_for_psychiatry/domain/usecase/LoginUseCase.dart';
 class LoginViewModel extends Cubit<LoginViewState>{
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-  var roleController = TextEditingController();
   LoginUseCase loginUseCase;
   @factoryMethod LoginViewModel(this.loginUseCase):super(InitialState());
 
@@ -18,12 +18,11 @@ class LoginViewModel extends Cubit<LoginViewState>{
       var user = await loginUseCase.invoke(
         emailController.text,
         passwordController.text,
-        roleController.text
-
       );
-      if (user == null) {
+      if(user == null){
         emit(ErrorState('Something went wrong'));
-      } else {
+      }
+      else {
         emit(LoginSuccessState(user));
       }
     } catch (e) {
@@ -31,7 +30,6 @@ class LoginViewModel extends Cubit<LoginViewState>{
     }
   }
 }
-
 
 
 sealed class LoginViewState{}
@@ -46,4 +44,4 @@ class LoadingState extends LoginViewState {}
 class LoginSuccessState extends LoginViewState {
   User user;
   LoginSuccessState(this.user);
-}
+}*/

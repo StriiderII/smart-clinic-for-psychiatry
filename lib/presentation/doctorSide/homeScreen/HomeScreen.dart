@@ -13,7 +13,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/screens/News
 
 
 class HomeScreenDoctor extends StatefulWidget {
-  static const String routeName = 'test screen_doctor';
+  static const String routeName = '/home_screen_doctor';
 
   const HomeScreenDoctor({super.key});
 
