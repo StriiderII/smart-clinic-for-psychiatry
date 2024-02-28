@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_clinic_for_psychiatry/di/di.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/SettingsScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/editProfile/EditProfileScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/language/LanguageScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/theme/ThemeScreen.dart';
@@ -7,11 +10,14 @@ import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScre
 
 class SettingsScreenDoctor extends StatefulWidget {
   static const String routeName = 'settings screen_doctor';
+
+  const SettingsScreenDoctor({super.key});
   @override
   _SettingsScreenDoctorState createState() => _SettingsScreenDoctorState();
 }
 
 class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +50,12 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditProfileScreen(),
+                        builder: (context) => const EditProfileScreen(),
                       ),
                     );
                   },
                 ),
-                Divider(
+                const Divider(
                   indent: 20,
                   endIndent: 35,
                 ),
@@ -64,7 +70,7 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                     );
                   },
                 ),
-                Divider(
+                const Divider(
                   indent: 20,
                   endIndent: 35,
                 ),
@@ -79,7 +85,7 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                     );
                   },
                 ),
-                Divider(
+                const Divider(
                   indent: 20,
                   endIndent: 35,
                 ),
@@ -87,13 +93,17 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                   title: 'About',
                   onTap: () {},
                 ),
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+
+                    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                    // Handle successful logout here (e.g., navigate to login)
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     elevation: 8,
-                    padding: EdgeInsets.symmetric(horizontal: 70, vertical: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -123,8 +133,8 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
             title,
             style: TextStyle(fontSize: 24.sp),
           ),
-          Spacer(),
-          Icon(Icons.navigate_next),
+          const Spacer(),
+          const Icon(Icons.navigate_next),
         ],
       ),
       onTap: onTap,

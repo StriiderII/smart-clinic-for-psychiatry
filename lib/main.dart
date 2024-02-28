@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:smart_clinic_for_psychiatry/data/API/CasheHelper.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/MyBlocObserver.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/chatScreen/ChatScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
@@ -20,19 +20,18 @@ import 'package:smart_clinic_for_psychiatry/presentation/patientSide/chatScreen/
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/splashScreen/SplashScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/selection/view/selection_view.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
 import 'firebase_options.dart';
 import 'presentation/newsScreen/logic/cubit/SearchCubit.dart';
 
-
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await CasheHelper.init();
 
   String? cache = CasheHelper.getData('news');
   String startWidget =
-      cache != null ? SelectionView.routeName : SelectionView.routeName;
+      cache != null ? LoginScreen.routeName : LoginScreen.routeName;
 
   runApp(
     MyApp(
@@ -63,14 +62,14 @@ class MyApp extends StatelessWidget {
         designSize: const Size(430, 932),
         minTextAdapt: true,
         splitScreenMode: true,
-        child: GetMaterialApp(
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Smart Clinic For Psychiatry',
           theme: MyTheme.LightTheme,
           routes: {
             SplashScreen.routeName: (_) => SplashScreen(),
             OnBoardingScreen.routeName: (_) => const OnBoardingScreen(),
-            /*UserRoleScreen.routeName: (_) => const UserRoleScreen(),*/
+            UserRoleScreen.routeName: (_) => const UserRoleScreen(),
             HomeScreen.routeName: (_) => HomeScreen(),
             HomeScreenDoctor.routeName: (_) => const HomeScreenDoctor(),
             NewsScreen.routeName: (_) => const NewsScreen(),
@@ -81,9 +80,7 @@ class MyApp extends StatelessWidget {
             ChatScreenDoctor.routeName: (context) => const ChatScreenDoctor(),
             RegisterScreen.routeName: (context) =>  const RegisterScreen(),
             LoginScreen.routeName: (context) =>  LoginScreen(),
-            SelectionView.routeName: (context) =>const SelectionView(),
-
-
+            ResetPasswordScreen.routeName: (context) => const ResetPasswordScreen(),
           },
           initialRoute: startWidget,
         ),

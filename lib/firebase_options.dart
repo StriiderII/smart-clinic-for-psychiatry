@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '530814919987',
     projectId: 'smart-clinic-for-psychiatry',
     authDomain: 'smart-clinic-for-psychiatry.firebaseapp.com',
+    databaseURL: 'https://smart-clinic-for-psychiatry-default-rtdb.firebaseio.com',
     storageBucket: 'smart-clinic-for-psychiatry.appspot.com',
     measurementId: 'G-ZZVNT67PTK',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:530814919987:android:778f005d5b5d733d6bca46',
     messagingSenderId: '530814919987',
     projectId: 'smart-clinic-for-psychiatry',
+    databaseURL: 'https://smart-clinic-for-psychiatry-default-rtdb.firebaseio.com',
     storageBucket: 'smart-clinic-for-psychiatry.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:530814919987:ios:138baf50095fd47d6bca46',
     messagingSenderId: '530814919987',
     projectId: 'smart-clinic-for-psychiatry',
+    databaseURL: 'https://smart-clinic-for-psychiatry-default-rtdb.firebaseio.com',
     storageBucket: 'smart-clinic-for-psychiatry.appspot.com',
     iosBundleId: 'com.example.smartClinicForPsychiatry',
   );
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:530814919987:ios:3011a13b0a5e18d96bca46',
     messagingSenderId: '530814919987',
     projectId: 'smart-clinic-for-psychiatry',
+    databaseURL: 'https://smart-clinic-for-psychiatry-default-rtdb.firebaseio.com',
     storageBucket: 'smart-clinic-for-psychiatry.appspot.com',
     iosBundleId: 'com.example.smartClinicForPsychiatry.RunnerTests',
   );

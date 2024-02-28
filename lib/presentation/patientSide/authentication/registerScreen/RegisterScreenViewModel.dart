@@ -1,12 +1,13 @@
+/*
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dart';
-import 'package:smart_clinic_for_psychiatry/domain/usecase/RegisterUseCase.dart';
+import 'package:smart_clinic_for_psychiatry/domain/usecase/registerUseCasePatient/RegisterUseCase.dart';
 
 @injectable
 class RegisterViewModel extends Cubit<RegisterViewState> {
-  RegisterUseCase registerUseCase;
+  RegisterUseCasePatient registerUseCasePatient;
 
 
   var nameController = TextEditingController();
@@ -20,12 +21,12 @@ class RegisterViewModel extends Cubit<RegisterViewState> {
   var passwordVerificationController = TextEditingController();
   var roleController = TextEditingController();
   @factoryMethod
-  RegisterViewModel(this.registerUseCase) : super(InitialState());
+  RegisterViewModel(this.registerUseCasePatient) : super(InitialState());
 
   void createAccount() async {
     try {
       emit(LoadingState());
-      var MyUser = await registerUseCase.invoke(
+      var user = await registerUseCasePatient.invoke(
           nameController.text,
           emailController.text,
           passwordController.text,
@@ -33,7 +34,7 @@ class RegisterViewModel extends Cubit<RegisterViewState> {
           phoneController.text,
           roleController.text);
 
-      emit(RegisterSuccessState(MyUser));
+      emit(RegisterSuccessState(user));
     } catch (e) {
       emit(ErrorState('Something went wrong'));
     }
@@ -53,6 +54,7 @@ class ErrorState extends RegisterViewState {
 class LoadingState extends RegisterViewState {}
 
 class RegisterSuccessState extends RegisterViewState {
-  MyUser? myUser;
-  RegisterSuccessState(this.myUser);
+  User? user;
+  RegisterSuccessState(this.user);
 }
+*/

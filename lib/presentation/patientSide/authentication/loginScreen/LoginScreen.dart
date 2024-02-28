@@ -1,17 +1,15 @@
+/*
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreenViewModel.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/customTextFormField/CustomTextFormField.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/authentication/loginScreen/LoginScreenViewModel.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/authentication/registerScreen/RegisterScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'login screen';
@@ -52,8 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text('Logged In Successfully'),
-                    content:
-                        Text('Logged In Successfully\n${state.myUser.email}'),
+                    content: Text('Logged In Successfully\n${state.user.email}'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
@@ -66,28 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 },
               );
-
-              // Add the condition here
-              switch (state.runtimeType) {
-                case LoginSuccessState:
-                  {
-                    Navigator.of(context).pop();
-                    final role = (state as LoginSuccessState).myUser.role;
-                    if (role == 'patient') {
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName);
-                    } else if (role == 'doctor') {
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreenDoctor.routeName);
-                    } else {
-                      // Handle other roles or invalid roles
-                    }
-                    break;
-                  }
-                // Handle other states if necessary
-                default:
-                  break;
-              }
+              break;
             }
 
           case InitialState():
@@ -119,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Welcome Back To Smart Clinic For Psychiatry',
                         style: TextStyle(
                             fontSize: 24.sp,
+
                             fontWeight: FontWeight.w600,
                             color: MyTheme.whiteColor),
                       ),
@@ -138,14 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 BounceInUp(
                   child: CustomFormField(
                     label: 'Email',
-                    hint: 'Enter your email',
+                    hint: 'Enter your Email',
                     controller: viewModel.emailController,
                     validator: (text) {
                       if (text == null || text.trim().isEmpty) {
                         return 'Please enter a valid e-mail';
                       }
                       bool emailValid = RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(text);
                       if (!emailValid) {
                         return 'Please enter a valid email';
@@ -157,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 BounceInUp(
                   child: CustomFormField(
                     label: 'Password',
-                    hint: 'Enter your password',
+                    hint: 'Enter your Password',
                     controller: viewModel.passwordController,
                     secureText: true,
                     validator: (text) {
@@ -210,10 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: MyTheme.whiteColor),
                     ),
                     TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, ResetPasswordScreen.routeName);
-                      },
+                      onPressed: () {},
                       child: Text(
                         'reset password',
                         style: TextStyle(
@@ -238,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           EdgeInsets.symmetric(vertical: 12),
                         ),
                         shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
@@ -269,4 +243,4 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() {
     viewModel.login();
   }
-}
+}*/

@@ -1,19 +1,19 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/customTextFormField/CustomTextFormField.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/authentication/loginScreen/LoginScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/authentication/registerScreen/RegisterScreenViewModel.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = 'register screen';
 
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -23,9 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var viewModel = getIt<RegisterViewModel>();
 
   var formKey = GlobalKey<FormState>();
-
-  late String chooseRoleButtonText =
-      'Choose Role'; // Initializing chooseRoleButtonText
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +47,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
           case RegisterSuccessState():
             {
-              DialogUtils.showMessage(context, 'Registered Successfully\n',
-                  posActionName: 'ok', posAction: () {
-                Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-              });
+              DialogUtils.showMessage(
+                  context,
+                  'Registered Successfully\n',
+                  posActionName: 'ok',
+                  posAction: () {
+                    Navigator.pushReplacementNamed(
+                        context, LoginScreen.routeName);
+                  });
             }
           case InitialState():
         }
@@ -86,6 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           '🎉 Welcome to our vibrant community of Smart Clinic For Psychiatry',
                           style: TextStyle(
                               fontSize: 24.sp,
+
                               fontWeight: FontWeight.w600,
                               color: MyTheme.whiteColor),
                         ),
@@ -127,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return 'Please enter a valid e-mail';
                         }
                         bool emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(text);
                         if (!emailValid) {
                           return 'Please enter a valid email';
@@ -217,44 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          MyTheme.backgroundButtonColor),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        const EdgeInsets.symmetric(
-                            vertical: 15), // Adjust padding
-                      ),
-                      shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, UserRoleScreen.routeName)
-                          .then((value) {
-                        if (value != null) {
-                          String buttonText =
-                              value == 'doctor' ? 'doctor' : 'patient';
-                          setState(() {
-                            viewModel.roleController.text =
-                                value.toString(); // Explicit cast to string
-                            chooseRoleButtonText = buttonText;
-                          });
-                        }
-                      });
-                    },
-                    child: Text(
-                      chooseRoleButtonText, // Default text if not set
-                      style: TextStyle(
-                        color: MyTheme.primaryLight,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600, // Adjust font size
-                      ),
-                    ),
-                  ),
+
                   BounceInUp(
                     child: Padding(
                       padding: const EdgeInsets.all(50),
@@ -262,12 +227,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               MyTheme.backgroundButtonColor),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(vertical: 12),
+                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(vertical: 12),
                           ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
@@ -287,6 +250,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -297,22 +261,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void createAccount() {
-    // Check if the role is not chosen
-    if (viewModel.roleController.text.isEmpty) {
-      // Show a message or handle the scenario where the role is not chosen
-      DialogUtils.showMessage(
-        context,
-        'Please complete the missing fields!',
-        posActionName: 'Ok',
-      );
-      return; // Exit the method early
-    }
-
-    // Check if the form is valid
     if (formKey.currentState?.validate() == false) return;
-
-    // If the role is chosen and the form is valid, proceed with creating the account
     viewModel.createAccount();
   }
-
-}
+}*/
