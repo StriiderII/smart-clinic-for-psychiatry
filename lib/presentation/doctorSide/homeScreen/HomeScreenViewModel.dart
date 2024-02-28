@@ -13,7 +13,7 @@ class HomeViewModelDoctor extends Cubit<HomeScreenState>{
     }else if (tabIndex ==2){
       emit(ChatScreenState());
     }else if (tabIndex ==3){
-      emit(SettingsScreenState());
+      emit(SettingsScreenStateDoctor());
     }
   }
 }
@@ -21,4 +21,4 @@ sealed class HomeScreenState{}
 class HomeScreenTabState extends HomeScreenState{}
 class NewsScreenState extends HomeScreenState{}
 class ChatScreenState extends HomeScreenState{}
-class SettingsScreenState extends HomeScreenState{}
+class SettingsScreenStateDoctor extends HomeScreenState{}

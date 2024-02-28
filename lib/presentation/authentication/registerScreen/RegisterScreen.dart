@@ -40,24 +40,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
       listener: (context, state) {
         switch (state) {
           case ErrorState():
-            {
-              DialogUtils.showMessage(context, state.message ?? "",
-                  posActionName: 'Ok');
-            }
+            DialogUtils.showMessage(context, state.message ?? "", posActionName: 'Ok');
+            break;
           case LoadingState():
-            {
-              DialogUtils.showLoading(context, 'Loading..');
-            }
+            DialogUtils.showLoading(context, 'Loading..');
+            break;
           case RegisterSuccessState():
-            {
-              DialogUtils.showMessage(context, 'Registered Successfully\n',
-                  posActionName: 'ok', posAction: () {
-                Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-              });
-            }
+          // Show success message for 1 second, then navigate automatically
+            Future.delayed(const Duration(seconds: 1), () {
+              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            });
+            DialogUtils.showMessage(context, 'Registered Successfully\n');
+            break;
           case InitialState():
+            break;
         }
       },
+
       bloc: viewModel,
       child: Scaffold(
         backgroundColor: MyTheme.primaryLight,

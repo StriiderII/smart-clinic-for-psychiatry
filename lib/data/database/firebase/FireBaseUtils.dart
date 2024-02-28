@@ -22,4 +22,13 @@ class FirebaseUtils {
     var querySnapshot = await getUsersCollection().doc(uId).get();
     return querySnapshot.data();
   }
+
+  static Future<String?> getUserName(String uId) async {
+    final user = await readUserFromFireStore(uId);
+    if (user != null) {
+      return user.name;
+    } else {
+      return null;
+    }
+  }
 }

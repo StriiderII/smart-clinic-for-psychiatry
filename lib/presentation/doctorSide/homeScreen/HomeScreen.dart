@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
@@ -18,7 +17,9 @@ class HomeScreenDoctor extends StatefulWidget {
   const HomeScreenDoctor({super.key});
 
   @override
-  _HomeScreenDoctorState createState() => _HomeScreenDoctorState();
+  _HomeScreenDoctorState createState() {
+    return _HomeScreenDoctorState();
+  }
 }
 
 class _HomeScreenDoctorState extends State<HomeScreenDoctor> {
@@ -36,26 +37,31 @@ class _HomeScreenDoctorState extends State<HomeScreenDoctor> {
           case HomeScreenTabState:
             {
               selectedIndex = 0;
-              bodyWidget = ServicesScreen();
+              bodyWidget = const ServicesScreen();
+              break;
             }
-            break;
+
           case NewsScreenState:
             {
               selectedIndex = 1;
-              bodyWidget = NewsScreen();
+              bodyWidget = const NewsScreen();
+              break;
             }
-            break;
+
           case ChatScreenState:
             {
               selectedIndex = 2;
-              bodyWidget = ChatScreenDoctor();
+              bodyWidget = const ChatScreenDoctor();
+              break;
             }
-            break;
 
-          case SettingsScreenState:
-            selectedIndex = 3;
-            bodyWidget = SettingsScreenDoctor();
-            break;
+          case SettingsScreenStateDoctor:
+            {
+              selectedIndex = 3;
+              bodyWidget = const SettingsScreenDoctor();
+              break;
+            }
+
           default:
             throw Exception("Invalid state: $state");
         }
@@ -63,14 +69,14 @@ class _HomeScreenDoctorState extends State<HomeScreenDoctor> {
         return Scaffold(
           backgroundColor: MyTheme.whiteColor,
           bottomNavigationBar: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
             child: GNav(
               backgroundColor: MyTheme.primaryLight,
               haptic: true,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
               color: MyTheme.whiteColor,
               tabBorderRadius: 20,
               iconSize: 25,
@@ -106,4 +112,3 @@ class _HomeScreenDoctorState extends State<HomeScreenDoctor> {
     );
   }
 }
-

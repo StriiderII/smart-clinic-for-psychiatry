@@ -15,7 +15,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRole
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'login screen';
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -45,50 +45,34 @@ class _LoginScreenState extends State<LoginScreen> {
             {
               DialogUtils.showLoading(context, 'Loading..');
             }
-          case LoginSuccessState():
-            {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Logged In Successfully'),
-                    content:
-                        Text('Logged In Successfully\n${state.myUser.email}'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, HomeScreen.routeName);
-                        },
-                        child: Text('OK'),
-                      ),
-                    ],
-                  );
-                },
-              );
 
-              // Add the condition here
-              switch (state.runtimeType) {
-                case LoginSuccessState:
-                  {
-                    Navigator.of(context).pop();
-                    final role = (state as LoginSuccessState).myUser.role;
-                    if (role == 'patient') {
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName);
-                    } else if (role == 'doctor') {
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreenDoctor.routeName);
-                    } else {
-                      // Handle other roles or invalid roles
-                    }
-                    break;
-                  }
-                // Handle other states if necessary
-                default:
-                  break;
+          case LoginSuccessState():
+            Future.delayed(const Duration(seconds: 1), () {
+              Navigator.of(context).pop(); // Close the dialog after 1 second
+              final role = (state as LoginSuccessState).myUser.role;
+              if (role == 'patient') {
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              } else if (role == 'doctor') {
+                Navigator.pushReplacementNamed(
+                    context, HomeScreenDoctor.routeName);
+              } else {
+                // Handle other roles or invalid roles
               }
-            }
+            });
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Logged In Successfully'),
+                  content:
+                      Text('Welcome back ${state.myUser.name}!',style:
+                        TextStyle(
+                          fontSize: 18
+                        ),),
+                );
+              },
+            );
+            break;
 
           case InitialState():
         }
