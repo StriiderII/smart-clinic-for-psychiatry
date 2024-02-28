@@ -25,5 +25,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository{
     return authenticationOnlineDataSource.login(email, password);
   }
 
+  @override
+  Future<void> logout() async {
+    // Call the logout method from the data source
+    await authenticationOnlineDataSource.logout();
+  }
+
 }
 

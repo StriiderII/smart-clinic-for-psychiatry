@@ -9,7 +9,8 @@ import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dar
 class AuthenticationOnlineDataSource extends AuthenticationDataSource {
   FirebaseUtils firebaseUtils;
 
-  @factoryMethod AuthenticationOnlineDataSource(this.firebaseUtils);
+  @factoryMethod
+  AuthenticationOnlineDataSource(this.firebaseUtils);
 
   @override
   Future<MyUser?> register(String name, String email, String password,
@@ -21,8 +22,8 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
       }
 
       // Create user in Firebase Authentication
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email, password: password);
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       // Create MyUser object with the provided information, including role
       MyUser myUser = MyUser(
@@ -42,22 +43,22 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
     }
   }
 
-
   @override
   Future<MyUser?> login(String email, String password) async {
     try {
       // Sign in with email and password
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password);
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
 
       // Retrieve user data from Firestore using FirebaseUtils
-      var user = await FirebaseUtils.readUserFromFireStore(credential.user?.uid ?? '');
+      var user =
+          await FirebaseUtils.readUserFromFireStore(credential.user?.uid ?? '');
 
       // Check if user data is retrieved successfully
       if (user != null) {
         // Update the user object with the retrieved data, including the role
-        user.role = user.role ?? ''; // Assign an empty string if role is not present
+        user.role =
+            user.role ?? ''; // Assign an empty string if role is not present
         return user;
       } else {
         return null; // Login failed if user data not retrieved
@@ -68,6 +69,15 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
     }
   }
 
+  @override
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut(); // Sign out the user
+    } catch (e) {
+      print("Error logging out: $e");
+    }
+  }
 
 
 }
+

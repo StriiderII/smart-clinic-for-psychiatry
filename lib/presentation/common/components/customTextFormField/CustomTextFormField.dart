@@ -60,11 +60,17 @@ class _CustomFormFieldState extends State<CustomFormField> {
         children: [
           TextFormField(
             validator: widget.secureText ? _passwordValidator : null,
+            cursorHeight: 25,
+            cursorWidth: 1,
+            cursorRadius: const Radius.circular(20),
+            cursorErrorColor: MyTheme.redColor,
             obscureText: widget.secureText && _obscureText,
             minLines: widget.lines,
             maxLines: widget.lines,
             keyboardType: widget.keyboardType,
-            style: TextStyle(color: MyTheme.whiteColor), // Keep text color same
+            style: TextStyle(color: MyTheme.whiteColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w300), // Keep text color same
             cursorColor: MyTheme.whiteColor, // Keep cursor color same
             decoration: InputDecoration(
               hintText: widget.hint,

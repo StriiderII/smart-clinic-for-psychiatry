@@ -1,4 +1,3 @@
-import 'package:smart_clinic_for_psychiatry/data/datasource/AuthenticationOnlineDataSource.dart';
 import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dart';
 
 abstract class AuthenticationDataSource {
@@ -8,8 +7,7 @@ abstract class AuthenticationDataSource {
       String password,
       String passwordVerification,
       String phone,
-      String role
-      );
+      String role);
   Future<MyUser?> login(String email, String password);
+  Future<void> logout(); // New method for logout
 }
-
