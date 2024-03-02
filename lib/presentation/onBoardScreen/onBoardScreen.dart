@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/introductionScreen/IntroductionScreen_1.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/introductionScreen/IntroductionScreen_2.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/introductionScreen/IntroductionScreen_3.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
 
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -61,7 +61,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return UserRoleScreen();
+                            return LoginScreen();
                           }));
                         },
                         child: Text('Done',style: TextStyle(

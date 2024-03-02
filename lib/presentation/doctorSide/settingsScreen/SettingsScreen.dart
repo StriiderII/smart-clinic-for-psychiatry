@@ -99,7 +99,7 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen(),
+                          builder: (context) =>  EditProfileScreen(),
                         ),
                       );
                     },
@@ -145,14 +145,40 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                   const SizedBox(height: 100),
                   ElevatedButton(
                     onPressed: () async {
-                      logout();
-                      // Handle successful logout here (e.g., navigate to login)
+                      // Show logout confirmation dialog
+                      bool logoutConfirmed = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Logout Confirmation'),
+                            content: Text('Are you sure you want to logout?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(false); // Return false if cancel is pressed
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true); // Return true if yes is pressed
+                                },
+                                child: Text('Yes'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      // Check if logout is confirmed
+                      if (logoutConfirmed == true) {
+                        logout();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       elevation: 8,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 70, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -165,6 +191,7 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

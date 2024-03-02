@@ -31,4 +31,12 @@ class FirebaseUtils {
       return null;
     }
   }
+  static Future<String?> getPhone(String uId) async {
+    final phone = await readUserFromFireStore(uId);
+    if (phone != null) {
+      return phone.phone;
+    } else {
+      return null;
+    }
+  }
 }

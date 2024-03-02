@@ -3,13 +3,13 @@ import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dar
 import 'package:smart_clinic_for_psychiatry/domain/repository/AuthenticationRepository.dart';
 
 @injectable
-class LogoutUseCase {
+class ResetPasswordUseCase {
   AuthenticationRepository repository;
 
-  @factoryMethod LogoutUseCase(this.repository);
+  @factoryMethod ResetPasswordUseCase(this.repository);
 
-  Future<MyUser?> invoke() async {
-    await repository.logout();
+  Future<MyUser?> invoke(String email) async {
+    await repository.resetPassword(email);
     return null;
   }
 }

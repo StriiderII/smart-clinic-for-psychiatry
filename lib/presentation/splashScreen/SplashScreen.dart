@@ -7,7 +7,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/onBoardScreen/onBoardSc
 
 class SplashScreen extends StatelessWidget {
   static const String routeName = 'splash screen';
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   @override

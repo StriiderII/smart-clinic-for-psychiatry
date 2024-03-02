@@ -11,7 +11,6 @@ import 'package:smart_clinic_for_psychiatry/presentation/common/components/custo
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'login screen';

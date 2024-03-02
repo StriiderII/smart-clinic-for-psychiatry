@@ -11,6 +11,10 @@ abstract class AuthenticationRepository {
       String role
       );
   Future<MyUser?> login(String email, String password);
-  Future<void> logout();
+  Future<MyUser?> logout();
+  Future<MyUser?> resetPassword(String email);
+  Future<MyUser?> updateUserInfo(String newName, String newPhone);
+  Future<MyUser?> changePassword(String currentEmail, String currentPassword, String newPassword, String confirmPassword);
+
 
 }
