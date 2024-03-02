@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
@@ -16,7 +15,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScr
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home_screen';
 
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

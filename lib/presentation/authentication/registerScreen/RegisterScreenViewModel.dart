@@ -18,7 +18,10 @@ class RegisterViewModel extends Cubit<RegisterViewState> {
   var passwordController = TextEditingController();
 
   var passwordVerificationController = TextEditingController();
+
   var roleController = TextEditingController();
+
+
   @factoryMethod
   RegisterViewModel(this.registerUseCase) : super(InitialState());
 
@@ -31,7 +34,8 @@ class RegisterViewModel extends Cubit<RegisterViewState> {
           passwordController.text,
           passwordVerificationController.text,
           phoneController.text,
-          roleController.text);
+          roleController.text,
+      );
 
       emit(RegisterSuccessState(MyUser));
     } catch (e) {
