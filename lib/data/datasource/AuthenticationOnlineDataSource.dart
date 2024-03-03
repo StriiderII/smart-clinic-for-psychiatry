@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:smart_clinic_for_psychiatry/data/database/firebase/FireBaseUtils.dart';
 import 'package:smart_clinic_for_psychiatry/data/datasourceContracts/AuthenticationDataSource.dart';
@@ -110,7 +113,8 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
       // Check if any update is needed
       if (updateMap.isEmpty) {
         // No changes, return the current user without update
-        final retrievedUser = await FirebaseUtils.readUserFromFireStore(user.uid);
+        final retrievedUser =
+            await FirebaseUtils.readUserFromFireStore(user.uid);
         return retrievedUser;
       }
 
@@ -137,9 +141,9 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
     }
   }
 
-
   @override
-  Future<MyUser?> changePassword(String currentEmail, String currentPassword, String newPassword, String confirmPassword) async {
+  Future<MyUser?> changePassword(String currentEmail, String currentPassword,
+      String newPassword, String confirmPassword) async {
     try {
       // Check if newPassword matches confirmPassword
       if (newPassword != confirmPassword) {
@@ -161,14 +165,38 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
       await user.updatePassword(newPassword);
 
       // Inform the user about successful password change
-
     } catch (e) {
       print("Error changing password: $e");
     }
+    return null;
   }
 
+  @override
+  Future<MyUser?> changeUserPicture(String picturePath) async {
+    try {
+      // Get the current user
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("User not logged in");
+      }
 
+      // Upload the picture to Firebase Storage
+      final storageRef = FirebaseStorage.instance.ref().child('user_pictures').child(user.uid);
+      final uploadTask = storageRef.putFile(File(picturePath));
+      final downloadUrl = await uploadTask.then((snapshot) => snapshot.ref.getDownloadURL());
 
+      // Update the user's picture in Firestore
+      final docRef =
+      FirebaseFirestore.instance.collection(MyUser.collectionName).doc(user.uid);
+      await docRef.update({'picture': downloadUrl});
 
+      // Retrieve and return the updated user object
+      final retrievedUser = await FirebaseUtils.readUserFromFireStore(user.uid);
+      return retrievedUser;
+    } catch (e) {
+      print("Error changing user picture: $e");
+      return null;
+    }
+  }
 }
 

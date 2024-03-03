@@ -11,7 +11,7 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
   var phoneController = TextEditingController();
   var newNameController = TextEditingController();
   var newPhoneController = TextEditingController();
-
+  var selectedPicturePath = '';
 
   EditProfileViewModel(this.editProfileUseCase) : super(InitialState());
 
@@ -39,6 +39,23 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
         nameController.text = updatedName;
         phoneController.text = updatedPhone;
 
+        emit(EditProfileSuccessState(MyUser));
+      }
+    } catch (e) {
+      emit(ErrorState(e.toString()));
+    }
+  }
+  void changeUserPicture() async {
+    try {
+      emit(LoadingState());
+
+      // Assuming you have a mechanism to get the selected picture path
+      final MyUser = await editProfileUseCase.changeUserPicture(selectedPicturePath);
+
+      if (MyUser == null) {
+        emit(ErrorState('Failed to change user picture'));
+      } else {
+        // Handle successful picture change (e.g., update UI)
         emit(EditProfileSuccessState(MyUser));
       }
     } catch (e) {
