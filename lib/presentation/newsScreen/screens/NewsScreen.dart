@@ -93,7 +93,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         fillColor: Colors.white,
                         enabled: true,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
                     ),

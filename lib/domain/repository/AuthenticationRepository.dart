@@ -15,6 +15,7 @@ abstract class AuthenticationRepository {
   Future<MyUser?> resetPassword(String email);
   Future<MyUser?> updateUserInfo(String newName, String newPhone);
   Future<MyUser?> changePassword(String currentEmail, String currentPassword, String newPassword, String confirmPassword);
+  Future<MyUser?> changeUserPicture(String picturePath);
 
 
 }

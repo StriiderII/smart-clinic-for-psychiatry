@@ -22,7 +22,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? userName; // Variable to store the user's name
   String? userPhone; // Variable to store the user's phone number
   bool editingProfile = false; // Flag to track if profile is being edited
-  bool showSuccessMessage = false; // Flag to track if success message should be shown
+  bool showSuccessMessage =
+  false; // Flag to track if success message should be shown
 
   @override
   void initState() {
@@ -135,7 +136,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           Navigator.of(context).pop();
                         },
                       ),
-                      SizedBox(width: 80.w),
+                      SizedBox(width: 95.w),
                       Image.asset('assets/images/edit_profile_font.png'),
                     ],
                   ),
@@ -168,7 +169,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 50.h,
+                    height: 70.h,
+                  ),
+                  const Divider(
+                    indent: 20,
+                    endIndent: 35,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,15 +209,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                         )
-                            : Text(
-                          userName ?? '',
-                          style: TextStyle(fontSize: 24),
+                            : Container(
+                          padding: EdgeInsets.only(left: 10, top: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: MyTheme
+                                  .primaryLight, // You can set the color of the border here
+                              width:
+                              1.0, // You can adjust the width of the border here
+                            ),
+                          ),
+                          child: Text(
+                            userName ?? '',
+                            style: TextStyle(fontSize: 24),
+                          ),
                         ),
                       ),
                       SizedBox(
-                        height: 50.h,
+                        height: 20.h,
                       ),
                     ],
+                  ),
+                  const Divider(
+                    indent: 20,
+                    endIndent: 35,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,9 +269,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                         )
-                            : Text(
-                          userPhone ?? '',
-                          style: TextStyle(fontSize: 24),
+                            : Container(
+                          padding: EdgeInsets.only(left: 10, top: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: MyTheme
+                                  .primaryLight, // You can set the color of the border here
+                              width:
+                              1.0, // You can adjust the width of the border here
+                            ),
+                          ),
+                          child: Text(
+                            userPhone ?? '',
+                            style: TextStyle(fontSize: 24),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -286,7 +319,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 30.h,
+                    height: 10.h,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -304,9 +337,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: editingProfile ? Colors.green : MyTheme.primaryLight,
+                      backgroundColor:
+                      editingProfile ? Colors.green : MyTheme.primaryLight,
                       elevation: 8,
-                      padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 70, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

@@ -88,7 +88,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       Navigator.of(context).pop();
                     },
                   ),
-                  SizedBox(width: 55.w),
+                  SizedBox(width: 70.w),
                   Image.asset('assets/images/change_password_font.png'),
                 ],
               ),

@@ -1,28 +1,36 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_clinic_for_psychiatry/data/database/firebase/FireBaseUtils.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/common/components/imageFuncions/ImageFunctions.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/editProfile/EditProfileViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/editProfile/changePassword/ChangePasswordScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const String routeName = 'edit profile';
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  File? pickedImage;
+  late SharedPreferences _prefs;
   var viewModel = getIt<EditProfileViewModel>();
   String? userName; // Variable to store the user's name
   String? userPhone; // Variable to store the user's phone number
   bool editingProfile = false; // Flag to track if profile is being edited
-  bool showSuccessMessage = false; // Flag to track if success message should be shown
+  bool showSuccessMessage =
+      false; // Flag to track if success message should be shown
 
   @override
   void initState() {
@@ -36,7 +44,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // Check if a user is signed in
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      print('No user signed in');
       return; // Handle the case where no user is signed in
     }
 
@@ -45,7 +52,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final name = await FirebaseUtils.getUserName(uId);
     setState(() {
       userName = name;
-      print('Retrieved name: $userName'); // Log the retrieved name
+      // Log the retrieved name
     });
   }
 
@@ -53,7 +60,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // Check if a user is signed in
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      print('No user signed in');
       return; // Handle the case where no user is signed in
     }
 
@@ -62,8 +68,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final phone = await FirebaseUtils.getPhone(uId);
     setState(() {
       userPhone = phone;
-      print('Retrieved phone: $userPhone'); // Log the retrieved phone number
+      // Log the retrieved phone number
     });
+  }
+
+  void updateUserInfo() {
+    viewModel.updateUserInfo();
   }
 
   @override
@@ -80,7 +90,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         switch (state) {
           case ErrorState():
             {
-              DialogUtils.showMessage(context, state.message ?? "",
+              DialogUtils.showMessage(context, state.message,
                   posActionName: 'Ok');
             }
           case LoadingState():
@@ -143,12 +153,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: 25.h,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      File? temp = await ImageFunctions.galleryPicker();
+                      if (temp != null) {
+                        pickedImage = temp;
+                      }
+                      setState(() {});
+                    },
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         CircleAvatar(
                           radius: 80.r,
+                          backgroundImage: pickedImage == null
+                              ? null
+                              : FileImage(pickedImage!),
+                          child: pickedImage == null
+                              ? Icon(
+                                  Icons.person,
+                                  size: 80,
+                                )
+                              : null,
                         ),
                         Positioned(
                           bottom: 5,
@@ -168,7 +193,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 50.h,
+                    height: 70.h,
+                  ),
+                  const Divider(
+                    indent: 20,
+                    endIndent: 35,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,38 +210,55 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               fontWeight: FontWeight.bold,
                             )),
                       ),
-                      Container(
+                      SizedBox(
                         width: 350.w,
                         height: 50.h,
                         child: editingProfile
                             ? TextFormField(
-                          controller: viewModel.newNameController,
-                          textAlign: TextAlign.start,
-                          cursorHeight: 32.h,
-                          cursorWidth: 1,
-                          cursorColor: const Color(0xff3660D9),
-                          decoration: InputDecoration(
-                            hintStyle: const TextStyle(fontSize: 13),
-                            hintText: 'full name',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                  color: Color(0xff3660D9)),
-                            ),
-                          ),
-                        )
-                            : Text(
-                          userName ?? '',
-                          style: TextStyle(fontSize: 24),
-                        ),
+                                controller: viewModel.newNameController,
+                                textAlign: TextAlign.start,
+                                cursorHeight: 32.h,
+                                cursorWidth: 1,
+                                cursorColor: const Color(0xff3660D9),
+                                decoration: InputDecoration(
+                                  hintStyle: const TextStyle(fontSize: 13),
+                                  hintText: 'full name',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xff3660D9)),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: MyTheme
+                                        .primaryLight, // You can set the color of the border here
+                                    width:
+                                        1.0, // You can adjust the width of the border here
+                                  ),
+                                ),
+                                child: Text(
+                                  userName ?? '',
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                              ),
                       ),
                       SizedBox(
-                        height: 50.h,
+                        height: 20.h,
                       ),
                     ],
+                  ),
+                  const Divider(
+                    indent: 20,
+                    endIndent: 35,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,36 +271,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               fontWeight: FontWeight.bold,
                             )),
                       ),
-                      Container(
+                      SizedBox(
                         width: 350.w,
                         height: 50.h,
                         child: editingProfile
                             ? TextFormField(
-                          controller: viewModel.newPhoneController,
-                          textAlign: TextAlign.start,
-                          cursorHeight: 32.h,
-                          cursorWidth: 1,
-                          cursorColor: const Color(0xff3660D9),
-                          decoration: InputDecoration(
-                            hintStyle: const TextStyle(fontSize: 13),
-                            hintText: 'phone number',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                  color: Color(0xff3660D9)),
-                            ),
-                          ),
-                        )
-                            : Text(
-                          userPhone ?? '',
-                          style: TextStyle(fontSize: 24),
-                        ),
+                                controller: viewModel.newPhoneController,
+                                textAlign: TextAlign.start,
+                                cursorHeight: 32.h,
+                                cursorWidth: 1,
+                                cursorColor: const Color(0xff3660D9),
+                                decoration: InputDecoration(
+                                  hintStyle: const TextStyle(fontSize: 13),
+                                  hintText: 'phone number',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xff3660D9)),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                    color: MyTheme
+                                        .primaryLight, // You can set the color of the border here
+                                    width:
+                                        1.0, // You can adjust the width of the border here
+                                  ),
+                                ),
+                                child: Text(
+                                  userPhone ?? '',
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                              ),
                       ),
                       SizedBox(
-                        height: 50.h,
+                        height: 10.h,
                       ),
                     ],
                   ),
@@ -304,9 +363,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: editingProfile ? Colors.green : MyTheme.primaryLight,
+                      backgroundColor:
+                          editingProfile ? Colors.green : MyTheme.primaryLight,
                       elevation: 8,
-                      padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 70, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -326,8 +387,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(10),
@@ -348,9 +409,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
-  }
-
-  void updateUserInfo() {
-    viewModel.updateUserInfo();
   }
 }

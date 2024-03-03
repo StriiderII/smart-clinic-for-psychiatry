@@ -48,4 +48,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<MyUser?> changePassword(String currentEmail, String currentPassword, String newPassword, String confirmPassword)async{
     return authenticationOnlineDataSource.changePassword(currentEmail, currentPassword,newPassword,confirmPassword);
   }
+
+  @override
+  Future<MyUser?> changeUserPicture(String picturePath) async {
+    return authenticationOnlineDataSource.changeUserPicture(picturePath);
+  }
 }
