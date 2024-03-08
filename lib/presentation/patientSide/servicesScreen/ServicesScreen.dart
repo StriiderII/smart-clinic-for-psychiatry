@@ -26,135 +26,144 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
     return Scaffold(
-      backgroundColor:
-          provider.isDarkMode() ? MyTheme.primaryDark : MyTheme.whiteColor,
-      // Add your custom app bar here
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 70, horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              WelcomeMessage(),
-              Text(
-                AppLocalizations.of(context)!.how_are_you_feeling_today,
-                style: GoogleFonts.poppins(
-                  color: provider.isDarkMode()
-                      ? MyTheme.whiteColor
-                      : MyTheme.primaryDark,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: provider.isDarkMode()
+                ? [const Color(0xff121212), const Color(0xff121212)]
+                : [const Color(0xff5078F2), const Color(0xffFFFFFF)],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 70, horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                WelcomeMessage(),
+                Text(
+                  AppLocalizations.of(context)!.how_are_you_feeling_today,
+                  style: GoogleFonts.poppins(
+                    color: provider.isDarkMode()
+                        ? MyTheme.whiteColor
+                        : MyTheme.primaryDark,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              SizedBox(height: 15),
-              Emoj(),
-              SizedBox(height: 50),
-              GestureDetector(
-                onTap: () {
-                  print('amogus');
-                },
-                child: Stack(
+                SizedBox(height: 15),
+                Emoj(),
+                SizedBox(height: 50),
+                GestureDetector(
+                  onTap: () {
+                    print('amogus');
+                  },
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        'assets/images/find_your_specialist_light.png',
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.fitWidth,
+                      ),
+                      Positioned(
+                        top: 20,
+                        left: 0,
+                        right: 120,
+                        child: Column(
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .find_your_specialist,
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 40.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .choose_a_doctor_to_help_you_from_our_large_doctors_profiles,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                /*      Text(
+                  AppLocalizations.of(context)!.vitals,
+                  style: GoogleFonts.poppins(
+                    fontSize: 30.sp,
+                    color: provider.isDarkMode()
+                        ? MyTheme.whiteColor
+                        : MyTheme.primaryDark,
+                  ),
+                ),*/
+                /* Vitals(),*/
+
+                SizedBox(
+                  height: 50.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/find_your_specialist_light.png',
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fitWidth,
-                    ),
-                    Positioned(
-                      top: 20,
-                      left: 0,
-                      right: 120,
-                      child: Column(
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.find_your_specialist,
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 40.sp,
-                              fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatBotScreen(),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.of(context)!
-                                .choose_a_doctor_to_help_you_from_our_large_doctors_profiles,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 16.sp,
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            Image.asset(
+                              'assets/images/ai_photo.png',
+                              width: MediaQuery.of(context).size.width,
+                              fit: BoxFit.fitWidth,
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              top: 20,
+                              left: 20,
+                              child: Text(
+                                AppLocalizations.of(context)!.talk_with_your_ai,
+                                style: TextStyle(
+                                  fontSize: 38,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 120,
+                              left: 20,
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .talk_with_your_ai_to_help_you_with_anything_anytime_anywhere,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              /*      Text(
-                AppLocalizations.of(context)!.vitals,
-                style: GoogleFonts.poppins(
-                  fontSize: 30.sp,
-                  color: provider.isDarkMode()
-                      ? MyTheme.whiteColor
-                      : MyTheme.primaryDark,
-                ),
-              ),*/
-              /* Vitals(),*/
-
-              SizedBox(
-                height: 50.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatBotScreen(),
-                          ),
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'assets/images/ai_photo.png',
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.fitWidth,
-                          ),
-                          Positioned(
-                            top: 20,
-                            left: 20,
-                            child: Text(
-                              AppLocalizations.of(context)!.talk_with_your_ai,
-                              style: TextStyle(
-                                fontSize: 38,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 120,
-                            left: 20,
-                            child: Text(
-                              AppLocalizations.of(context)!
-                                  .talk_with_your_ai_to_help_you_with_anything_anytime_anywhere,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

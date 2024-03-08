@@ -8,8 +8,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
-
-
 class WelcomeMessage extends StatefulWidget {
   const WelcomeMessage({Key? key}) : super(key: key);
 
@@ -77,14 +75,14 @@ class _WelcomeMessageState extends State<WelcomeMessage> {
                 fontWeight: FontWeight.w500,
                 color: provider.isDarkMode()
                     ? MyTheme.whiteColor
-                    : MyTheme.primaryDark, // Set the color to white
+                    : MyTheme.whiteColor, // Set the color to white
               ),
             ),
             Text(
               '${AppLocalizations.of(context)!.doctor}\t${_userName ?? 'User name'}', // Use retrieved name or default
               style: GoogleFonts.poppins(
                 fontSize: 20,
-                color: provider.isDarkMode() ? MyTheme.whiteColor : MyTheme.primaryDark,
+                color: provider.isDarkMode() ? MyTheme.whiteColor : MyTheme.whiteColor,
               ),
             ),
 
@@ -92,21 +90,37 @@ class _WelcomeMessageState extends State<WelcomeMessage> {
           ],
         ),
         Spacer(),
-        Row(
-          children: [
-            Icon(
-              Icons.notifications_none_outlined,
-              size: 30.sp,
-              color: provider.isDarkMode()
-                  ? MyTheme.whiteColor
-                  : MyTheme.primaryDark,
-            ),
-            SizedBox(width: 10.w),
-            CircleAvatar(
-              backgroundImage:
-              _userPicture != null ? NetworkImage(_userPicture!) : null,
-            ),
-          ],
+        Container(
+          decoration: BoxDecoration(
+            color: provider.isDarkMode() ? MyTheme.primaryDark : MyTheme.whiteColor,
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.notifications_none_outlined,
+                size: 30.sp,
+                color: provider.isDarkMode()
+                    ? MyTheme.whiteColor
+                    : MyTheme.primaryDark,
+              ),
+              SizedBox(width: 10.w),
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: provider.isDarkMode() ? MyTheme.primaryDark : MyTheme.whiteColor,
+                backgroundImage:
+                _userPicture != null ? NetworkImage(_userPicture!) : null,
+              ),
+            ],
+          ),
         ),
       ],
     );

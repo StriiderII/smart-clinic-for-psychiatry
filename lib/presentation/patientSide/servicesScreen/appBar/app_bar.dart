@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -76,37 +75,52 @@ class _WelcomeMessageState extends State<WelcomeMessage> {
                 fontWeight: FontWeight.w500,
                 color: provider.isDarkMode()
                     ? MyTheme.whiteColor
-                    : MyTheme.primaryDark, // Set the color to white
+                    : MyTheme.whiteColor, // Set the color to white
               ),
             ),
             Text(
-              '${_userName}' ?? 'User name', // Use retrieved name or default
+              '${_userName ?? 'User name'}', // Use retrieved name or default
               style: GoogleFonts.poppins(
                 fontSize: 20,
-                color: provider.isDarkMode()
-                    ? MyTheme.whiteColor
-                    : MyTheme.primaryDark,
+                color: provider.isDarkMode() ? MyTheme.whiteColor : MyTheme.whiteColor,
               ),
             ),
+
             SizedBox(height: 10.h),
           ],
         ),
         Spacer(),
-        Row(
-          children: [
-            Icon(
-              Icons.notifications_none_outlined,
-              size: 30.sp,
-              color: provider.isDarkMode()
-                  ? MyTheme.whiteColor
-                  : MyTheme.primaryDark,
-            ),
-            SizedBox(width: 10.w),
-            CircleAvatar(
-              backgroundImage:
-                  _userPicture != null ? NetworkImage(_userPicture!) : null,
-            ),
-          ],
+        Container(
+          decoration: BoxDecoration(
+            color: provider.isDarkMode() ? MyTheme.primaryDark : MyTheme.whiteColor,
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.notifications_none_outlined,
+                size: 30.sp,
+                color: provider.isDarkMode()
+                    ? MyTheme.whiteColor
+                    : MyTheme.primaryDark,
+              ),
+              SizedBox(width: 10.w),
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: provider.isDarkMode() ? MyTheme.primaryDark : MyTheme.whiteColor,
+                backgroundImage:
+                _userPicture != null ? NetworkImage(_userPicture!) : null,
+              ),
+            ],
+          ),
         ),
       ],
     );
