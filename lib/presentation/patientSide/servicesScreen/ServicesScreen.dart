@@ -48,7 +48,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   style: GoogleFonts.poppins(
                     color: provider.isDarkMode()
                         ? MyTheme.whiteColor
-                        : MyTheme.primaryDark,
+                        : MyTheme.whiteColor,
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w500,
                   ),
