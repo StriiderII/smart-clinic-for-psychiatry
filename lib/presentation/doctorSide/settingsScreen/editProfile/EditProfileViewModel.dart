@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dart';
 import 'package:smart_clinic_for_psychiatry/domain/usecase/EditProfileUseCase.dart';
@@ -24,13 +25,14 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
       final originalPhone = phoneController.text;
 
       // Use ternary operators to conditionally update name and phone based on user input
-      final updatedName = newNameController.text.isEmpty ? originalName : newNameController.text;
-      final updatedPhone = newPhoneController.text.isEmpty ? originalPhone : newPhoneController.text;
+      final updatedName = newNameController.text.isEmpty
+          ? originalName
+          : newNameController.text;
+      final updatedPhone = newPhoneController.text.isEmpty
+          ? originalPhone
+          : newPhoneController.text;
 
-      final MyUser = await editProfileUseCase.invoke(
-          updatedName,
-          updatedPhone
-      );
+      final MyUser = await editProfileUseCase.invoke(updatedName, updatedPhone);
 
       if (MyUser == null) {
         emit(ErrorState('Failed to update user information'));
@@ -45,24 +47,6 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
       emit(ErrorState(e.toString()));
     }
   }
-  void changeUserPicture() async {
-    try {
-      emit(LoadingState());
-
-      // Assuming you have a mechanism to get the selected picture path
-      final MyUser = await editProfileUseCase.changeUserPicture(selectedPicturePath);
-
-      if (MyUser == null) {
-        emit(ErrorState('Failed to change user picture'));
-      } else {
-        // Handle successful picture change (e.g., update UI)
-        emit(EditProfileSuccessState(MyUser));
-      }
-    } catch (e) {
-      emit(ErrorState(e.toString()));
-    }
-  }
-
 }
 
 // Define the states

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class QuizScreen extends StatefulWidget {
   QuizScreen(this.question, this.x, this.disorder, this.colors);
@@ -17,11 +19,13 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: provider.isDarkMode()
+          ? MyTheme.primaryDark
+          : MyTheme.whiteColor,
       body: Container(
-        child:
-            Question(widget.question, widget.x, widget.disorder, widget.colors),
+        child: Question(widget.question, widget.x, widget.disorder, widget.colors),
       ),
     );
   }
@@ -45,6 +49,7 @@ class _QuestionState extends State<Question> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
@@ -82,10 +87,9 @@ class _QuestionState extends State<Question> {
                   ),
                   Padding(
                     child: Text(
-
-                      over == false ? 'Push Your Mental Boundaries' : 'Results',
+                      over == false ? AppLocalizations.of(context)!.push_your_mental_boundaries : AppLocalizations.of(context)!.results,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: MyTheme.whiteColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 22),
                     ),
@@ -103,7 +107,9 @@ class _QuestionState extends State<Question> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Colors.blueGrey, width: 2),
-                  color: Colors.white,
+                  color: provider.isDarkMode()
+                      ? MyTheme.primaryDark
+                      : MyTheme.whiteColor,
                 ),
                 child: Center(
                   child: Column(
@@ -111,56 +117,65 @@ class _QuestionState extends State<Question> {
                     children: [
                       Text(
                         over == false
-                            ? 'Question no - ${i + 1}'
-                            : '------ Conclusion ------',
+                            ? '${AppLocalizations.of(context)!.question_no} - ${i + 1}'
+                            : AppLocalizations.of(context)!.conclusion,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.bold,
+                        color: provider.isDarkMode()
+                            ? MyTheme.whiteColor
+                            : MyTheme.primaryDark),
                       ),
                       SizedBox(height: height / 30),
                       Text(
                         over == false
                             ? widget.question[i]
                             : ans == widget.qno
-                                ? "you are having chances of suffering through ${widget.disorder}"
-                                : ans >= widget.qno / 2
-                                    ? "You have moderate chances of suffering through ${widget.disorder}"
-                                    : "You have very low chances of suffering through ${widget.disorder}",
+                            ? '${AppLocalizations.of(context)!.you_are_having_chances_of_suffering_through} ${widget.disorder}'
+                            : ans >= widget.qno / 2
+                            ? '${AppLocalizations.of(context)!.you_have_moderate_chances_of_suffering_through} ${widget.disorder}'
+                            : '${AppLocalizations.of(context)!.you_have_very_low_chances_of_suffering_through} ${widget.disorder}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold),
+                            fontSize: 17, fontWeight: FontWeight.bold,
+                        color: provider.isDarkMode()
+                            ? MyTheme.whiteColor
+                            : MyTheme.primaryDark),
                       ),
                       SizedBox(height: 20),
                       over == true
                           ? Container(
-                              child: CircularPercentIndicator(
-                                radius: 80.0,
-                                lineWidth: 13.0,
-                                animation: true,
-                                animationDuration: 600,
-                                percent: ans == widget.qno
-                                    ? 0.9
-                                    : ans >= widget.qno / 2
-                                        ? 0.6
-                                        : 0.3,
-                                center: new Text(
-                                  ans == widget.qno
-                                      ? "High Risk"
-                                      : ans >= widget.qno / 2
-                                          ? "Moderate Risk"
-                                          : "Low Risk",
-                                  style: new TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                                circularStrokeCap: CircularStrokeCap.round,
-                                progressColor: ans == widget.qno
-                                    ? Colors.red
-                                    : ans >= widget.qno / 2
-                                        ? Colors.orange
-                                        : Colors.green,
-                              ),
-                            )
+                        child: CircularPercentIndicator(
+                          radius: 80.0,
+                          lineWidth: 13.0,
+                          animation: true,
+                          animationDuration: 600,
+                          percent: ans == widget.qno
+                              ? 0.9
+                              : ans >= widget.qno / 2
+                              ? 0.6
+                              : 0.3,
+                          center: new Text(
+                            ans == widget.qno
+                                ? AppLocalizations.of(context)!.high_risk
+                                : ans >= widget.qno / 2
+                                ? AppLocalizations.of(context)!.moderate_risk
+                                : AppLocalizations.of(context)!.low_risk,
+                            style: new TextStyle(
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                          circularStrokeCap: CircularStrokeCap.round,
+                          progressColor: ans == widget.qno
+                              ? Colors.red
+                              : ans >= widget.qno / 2
+                              ? Colors.orange
+                              : Colors.green,
+                        ),
+                      )
                           : SizedBox(),
                     ],
                   ),
@@ -172,89 +187,99 @@ class _QuestionState extends State<Question> {
         SizedBox(height: 0.35 * height),
         over == false
             ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    width: 0.36 * width,
-                    height: 0.08 * height,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        ans++;
-                        setState(() {
-                          i++;
-                          if (i > widget.qno - 1) {
-                            over = true;
-                            String risk = ans == widget.qno
-                                ? "High"
-                                : ans >= widget.qno / 2
-                                    ? "Moderate"
-                                    : "Low";
-                          }
-                        });
-                      },
-                      child: Text(
-                        'Yes',
-                        style: TextStyle(color: Colors.white,fontSize: 24),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            widget.colors[0].withOpacity(0.7)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(
+              width: 0.36 * width,
+              height: 0.08 * height,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    ans++;
+                    i++;
+                    if (i > widget.qno - 1) {
+                      over = true;
+                      String risk = ans == widget.qno
+                          ? AppLocalizations.of(context)!.high
+                          : ans >= widget.qno / 2
+                          ? AppLocalizations.of(context)!.moderate
+                          : AppLocalizations.of(context)!.low;
+                    }
+                  });
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.yes,
+                  style: TextStyle(color: provider.isDarkMode()
+                      ? MyTheme.whiteColor
+                      : MyTheme.primaryDark,fontSize: 24,),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      widget.colors[0].withOpacity(0.7)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  SizedBox(
-                    width: 0.36 * width,
-                    height: 0.08 * height,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          i++;
-                          if (i > widget.qno - 1) {
-                            over = true;
-                          }
-                        });
-                      },
-                      child: Text(
-                        'No',
-                        style: TextStyle(color: Colors.white,fontSize: 24),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            widget.colors[1].withOpacity(0.8)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 0.36 * width,
+              height: 0.08 * height,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    i++;
+                    if (i > widget.qno - 1) {
+                      over = true;
+                    }
+                  });
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.no,
+                  style: TextStyle(color: provider.isDarkMode()
+                      ? MyTheme.whiteColor
+                      : MyTheme.primaryDark,fontSize: 24,),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      widget.colors[1].withOpacity(0.8)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                ],
-              )
+                ),
+              ),
+            ),
+          ],
+        )
             : ans == widget.qno
-                ? Text(
-                    'Please focus on yourself and give your self some time to meditate and relax;',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  )
-                : ans >= widget.qno / 2
-                    ? Text(
-                        'Keep meditating regularly and eat healthy.\nYou are just few days away from perfect mental health',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    : Text(
-                        'Your health seems good enough.\nKeep it up!!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
+            ? Text(
+          AppLocalizations.of(context)!.please_focus_on_yourself_and_give_your_self_some_time_to_meditate_and_relax,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: provider.isDarkMode()
+              ? MyTheme.whiteColor
+              : MyTheme.primaryDark),
+        )
+            : ans >= widget.qno / 2
+            ? Text(
+          AppLocalizations.of(context)!.keep_meditating_regularly_and_eat_healthy_you_are_just_few_days_away_from_perfect_mental_health,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.bold,color: provider.isDarkMode()
+              ? MyTheme.whiteColor
+              : MyTheme.primaryDark),
+        )
+            : Text(
+          AppLocalizations.of(context)!.your_health_seems_good_enough_Keep_it_up,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.bold,color: provider.isDarkMode()
+              ? MyTheme.whiteColor
+              : MyTheme.primaryDark),
+        )
       ],
     );
   }

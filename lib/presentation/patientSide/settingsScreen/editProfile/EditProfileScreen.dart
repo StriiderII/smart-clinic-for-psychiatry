@@ -1,13 +1,18 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/data/database/firebase/FireBaseUtils.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/common/components/imageProfile/ImageFunctions.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/editProfile/EditProfileViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/editProfile/changePassword/ChangePasswordScreen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const String routeName = 'edit profile';
@@ -18,23 +23,23 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  File? pickedImage;
   var viewModel = getIt<EditProfileViewModel>();
-  String? userName; // Variable to store the user's name
-  String? userPhone; // Variable to store the user's phone number
-  bool editingProfile = false; // Flag to track if profile is being edited
-  bool showSuccessMessage =
-  false; // Flag to track if success message should be shown
+  String? userName;
+  String? userPhone;
+  String? _userPicture;
+  bool editingProfile = false;
+  bool showSuccessMessage = false;
 
   @override
   void initState() {
     super.initState();
-    // Call the functions to get the user's information when the screen initializes
     _getUserName();
     _getPhone();
+    _getUserPicture();
   }
 
-  Future<void> _getUserName() async {
-    // Check if a user is signed in
+  Future<void> _getUserPicture() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       print('No user signed in');
@@ -43,6 +48,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     final String uId = user.uid; // Use actual logic to get ID
 
+    final picture = await FirebaseUtils.getUserProfileImage(uId);
+    setState(() {
+      _userPicture = picture;
+      print('Retrieved name: $_userPicture'); // Log the retrieved name
+    });
+  }
+
+  Future<void> _getUserName() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print('No user signed in');
+      return;
+    }
+    final String uId = user.uid;
     final name = await FirebaseUtils.getUserName(uId);
     setState(() {
       userName = name;
@@ -51,24 +70,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _getPhone() async {
-    // Check if a user is signed in
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       print('No user signed in');
-      return; // Handle the case where no user is signed in
+      return;
     }
-
-    final String uId = user.uid; // Use actual logic to get ID
-
+    final String uId = user.uid;
     final phone = await FirebaseUtils.getPhone(uId);
     setState(() {
       userPhone = phone;
-      print('Retrieved phone: $userPhone'); // Log the retrieved phone number
+      print('Retrieved phone: $userPhone');
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return BlocListener<EditProfileViewModel, EditProfileViewState>(
       listenWhen: (old, newState) {
         if (old is LoadingState && newState is! LoadingState) {
@@ -93,7 +110,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               setState(() {
                 showSuccessMessage = true;
               });
-              Future.delayed(const Duration(milliseconds: 1000), () {
+              Future.delayed(const Duration(milliseconds: 2000), () {
                 setState(() {
                   showSuccessMessage = false;
                 });
@@ -102,6 +119,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               // Fetch updated user information from Firebase
               _getUserName();
               _getPhone();
+              _getUserPicture(); // Refresh profile image
               break;
             }
           case InitialState():
@@ -111,7 +129,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       child: Scaffold(
         body: Stack(
           children: [
-            Image.asset(
+            provider.isDarkMode()
+                ? Image.asset(
+              'assets/images/settings_page_dark.png',
+              fit: BoxFit.fill,
+              width: double.infinity,
+              height: double.infinity,
+            )
+                : Image.asset(
               'assets/images/settings_page.png',
               fit: BoxFit.fill,
               width: double.infinity,
@@ -136,35 +161,68 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           Navigator.of(context).pop();
                         },
                       ),
-                      SizedBox(width: 95.w),
-                      Image.asset('assets/images/edit_profile_font.png'),
+                      SizedBox(width: 60.w),
+                      Text(
+                        AppLocalizations.of(context)!.edit_profile,
+                        style: TextStyle(
+                            color: MyTheme.whiteColor,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 25.h,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      if (editingProfile) {
+                        File? temp = await ImageFunctions.galleryPicker();
+                        if (temp != null) {
+                          // Upload the selected image to Firebase Storage
+                          String? imageUrl =
+                          await ImageFunctions.uploadImageToFirebaseStorage(
+                              temp);
+                          if (imageUrl != null) {
+                            setState(() {
+                              pickedImage = temp;
+                            });
+                          } else {
+                            print("Error uploading image to Firebase Storage.");
+                          }
+                        }
+                      }
+                    },
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         CircleAvatar(
                           radius: 80.r,
+                          backgroundImage: _userPicture == null
+                              ? null
+                              : NetworkImage(_userPicture!),
+                          child: _userPicture == null
+                              ? const Icon(
+                            Icons.person,
+                            size: 80,
+                          )
+                              : null,
                         ),
-                        Positioned(
-                          bottom: 5,
-                          right: 5,
-                          child: CircleAvatar(
-                            radius: 15,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.asset(
-                                'assets/images/edit_profile_icon.png',
-                                fit: BoxFit.cover,
+                        if (editingProfile)
+                          Positioned(
+                            bottom: 5,
+                            right: 5,
+                            child: CircleAvatar(
+                              radius: 15,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  'assets/images/edit_profile_icon.png',
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -180,25 +238,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(left: 10),
-                        child: const Text('Full Name',
+                        child: Text(AppLocalizations.of(context)!.full_name,
                             style: TextStyle(
-                              fontSize: 17,
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             )),
                       ),
                       Container(
                         width: 350.w,
-                        height: 50.h,
+                        height: 55.h,
                         child: editingProfile
                             ? TextFormField(
+                          style: TextStyle(
+                            color: provider.isDarkMode()
+                                ? MyTheme.whiteColor
+                                : MyTheme.primaryDark,
+                          ),
                           controller: viewModel.newNameController,
                           textAlign: TextAlign.start,
-                          cursorHeight: 32.h,
+                          cursorHeight: 28.h,
                           cursorWidth: 1,
                           cursorColor: const Color(0xff3660D9),
                           decoration: InputDecoration(
-                            hintStyle: const TextStyle(fontSize: 13),
-                            hintText: 'full name',
+                            hintStyle: TextStyle(
+                              fontSize: 18,
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                            ),
+                            hintText:
+                            AppLocalizations.of(context)!.full_name,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -210,19 +282,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         )
                             : Container(
-                          padding: EdgeInsets.only(left: 10, top: 5),
+                          padding:
+                          const EdgeInsets.only(left: 10, top: 7),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: MyTheme
-                                  .primaryLight, // You can set the color of the border here
+                              color: Colors.grey
+                                  .shade400, // You can set the color of the border here
                               width:
                               1.0, // You can adjust the width of the border here
                             ),
                           ),
                           child: Text(
                             userName ?? '',
-                            style: TextStyle(fontSize: 24),
+                            style: const TextStyle(fontSize: 24),
                           ),
                         ),
                       ),
@@ -240,25 +314,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(left: 10),
-                        child: const Text('Phone Number',
+                        child: Text(AppLocalizations.of(context)!.phone_numbers,
                             style: TextStyle(
-                              fontSize: 17,
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             )),
                       ),
                       Container(
                         width: 350.w,
-                        height: 50.h,
+                        height: 55.h,
                         child: editingProfile
                             ? TextFormField(
+                          style: TextStyle(
+                            color: provider.isDarkMode()
+                                ? MyTheme.whiteColor
+                                : MyTheme.primaryDark,
+                          ),
                           controller: viewModel.newPhoneController,
                           textAlign: TextAlign.start,
-                          cursorHeight: 32.h,
+                          cursorHeight: 28.h,
                           cursorWidth: 1,
                           cursorColor: const Color(0xff3660D9),
                           decoration: InputDecoration(
-                            hintStyle: const TextStyle(fontSize: 13),
-                            hintText: 'phone number',
+                            hintStyle: TextStyle(
+                              fontSize: 18,
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                            ),
+                            hintText: AppLocalizations.of(context)!
+                                .phone_numbers,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -270,24 +358,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         )
                             : Container(
-                          padding: EdgeInsets.only(left: 10, top: 5),
+                          padding:
+                          const EdgeInsets.only(left: 10, top: 7),
                           decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
-                              color: MyTheme
-                                  .primaryLight, // You can set the color of the border here
+                              color: Colors.grey
+                                  .shade400, // You can set the color of the border here
                               width:
                               1.0, // You can adjust the width of the border here
                             ),
                           ),
                           child: Text(
                             userPhone ?? '',
-                            style: TextStyle(fontSize: 24),
+                            style: const TextStyle(fontSize: 24),
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 50.h,
+                        height: 10.h,
                       ),
                     ],
                   ),
@@ -305,22 +395,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             );
                           },
                           child: Text(
-                            'Change password',
+                            AppLocalizations.of(context)!.change_password,
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 decorationThickness: 1,
-                                decorationColor: MyTheme.blackColor,
+                                decorationColor: provider.isDarkMode()
+                                    ? MyTheme.whiteColor
+                                    : MyTheme.primaryDark,
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w700,
-                                color: MyTheme.blackColor),
+                                color: provider.isDarkMode()
+                                    ? MyTheme.whiteColor
+                                    : MyTheme.primaryDark),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+
                   ElevatedButton(
                     onPressed: () {
                       if (editingProfile) {
@@ -347,7 +439,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                     child: Text(
-                      editingProfile ? 'Save Changes' : 'Edit Profile',
+                      editingProfile
+                          ? AppLocalizations.of(context)!.save_changes
+                          : AppLocalizations.of(context)!.edit_profile,
                       style: TextStyle(
                         fontSize: 24.sp,
                         color: Colors.white,
@@ -361,8 +455,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(10),
@@ -389,3 +483,4 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     viewModel.updateUserInfo();
   }
 }
+

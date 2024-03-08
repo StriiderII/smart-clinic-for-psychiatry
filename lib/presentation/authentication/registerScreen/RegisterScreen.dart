@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreenViewModel.dart';
@@ -9,6 +10,8 @@ import 'package:smart_clinic_for_psychiatry/presentation/common/components/custo
 import 'package:animate_do/animate_do.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String routeName = 'register screen';
@@ -25,10 +28,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var formKey = GlobalKey<FormState>();
 
   late String chooseRoleButtonText =
-      'Choose Role'; // Initializing chooseRoleButtonText
+      AppLocalizations.of(context)!.choose_role; // Initializing chooseRoleButtonText
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return BlocListener<RegisterViewModel, RegisterViewState>(
       listenWhen: (old, newState) {
         if (old is LoadingState && newState is! LoadingState) {
@@ -40,17 +44,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       listener: (context, state) {
         switch (state) {
           case ErrorState():
-            DialogUtils.showMessage(context, state.message ?? "", posActionName: 'Ok');
+            DialogUtils.showMessage(context, AppLocalizations.of(context)!.something_went_wrong, posActionName: AppLocalizations.of(context)!.ok);
             break;
           case LoadingState():
-            DialogUtils.showLoading(context, 'Loading..');
+            DialogUtils.showLoading(context, AppLocalizations.of(context)!.loading);
             break;
           case RegisterSuccessState():
           // Show success message for 1 second, then navigate automatically
             Future.delayed(const Duration(seconds: 1), () {
               Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             });
-            DialogUtils.showMessage(context, 'Registered Successfully\n');
+            DialogUtils.showMessage(context, AppLocalizations.of(context)!.registered_successfully);
             break;
           case InitialState():
             break;
@@ -59,7 +63,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       bloc: viewModel,
       child: Scaffold(
-        backgroundColor: MyTheme.primaryLight,
+        backgroundColor: provider.isDarkMode()
+            ? MyTheme.primaryDark
+            : MyTheme.primaryLight,
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -72,7 +78,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 70.h,
                   ),
                   BounceInDown(
-                    child: Image.asset('assets/images/signup_font.png'),
+                    child: Text(AppLocalizations.of(context)!.sign_up,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: MyTheme.whiteColor,
+                          fontSize: 60,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 40.h,
@@ -82,14 +95,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '🎉 Welcome to our vibrant community of Smart Clinic For Psychiatry',
+                          AppLocalizations.of(context)!.welcome_to_our_vibrant_community_of_smart_clinic_for_psychiatry,
                           style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w600,
                               color: MyTheme.whiteColor),
                         ),
                         Text(
-                          'Feel free to Sign Up and join us on our exciting journey',
+                          AppLocalizations.of(context)!.feel_free_to_sign_up_and_join_us_on_our_exciting_journey,
                           style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w300,
@@ -103,13 +116,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   BounceInLeft(
                     child: CustomFormField(
-                      label: 'Full Name',
-                      hint: 'name',
+                      label: AppLocalizations.of(context)!.full_name,
+                      hint: AppLocalizations.of(context)!.full_name,
                       controller: viewModel.nameController,
                       keyboardType: TextInputType.name,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a valid username';
+                          return AppLocalizations.of(context)!.please_enter_a_valid_username;
                         }
                         return null;
                       },
@@ -117,19 +130,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   BounceInLeft(
                     child: CustomFormField(
-                      label: 'Email',
-                      hint: 'email',
+                      label: AppLocalizations.of(context)!.email,
+                      hint: AppLocalizations.of(context)!.email,
                       controller: viewModel.emailController,
                       keyboardType: TextInputType.emailAddress,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a valid e-mail';
+                          return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
                         }
                         bool emailValid = RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(text);
                         if (!emailValid) {
-                          return 'Please enter a valid email';
+                          return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
                         }
                         return null;
                       },
@@ -137,16 +150,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   BounceInLeft(
                     child: CustomFormField(
-                      label: 'Phone',
-                      hint: 'phone',
+                      label: AppLocalizations.of(context)!.phone_numbers,
+                      hint: AppLocalizations.of(context)!.phone_numbers,
                       controller: viewModel.phoneController,
                       keyboardType: TextInputType.phone,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a valid phone';
+                          return AppLocalizations.of(context)!.please_enter_a_valid_phone_number;
                         }
                         if (text.length < 11) {
-                          return 'Phone should be at least 11 characters';
+                          return AppLocalizations.of(context)!.phone_should_be_at_least_eleven_characters;
                         }
                         return null;
                       },
@@ -154,17 +167,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   BounceInLeft(
                     child: CustomFormField(
-                      label: 'Password',
-                      hint: 'password',
+                      label: AppLocalizations.of(context)!.password,
+                      hint: AppLocalizations.of(context)!.password,
                       controller: viewModel.passwordController,
                       keyboardType: TextInputType.text,
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a valid password';
+                          return AppLocalizations.of(context)!.please_enter_a_valid_password;
                         }
                         if (text.length < 6) {
-                          return 'Password should be at least 6 characters';
+                          return AppLocalizations.of(context)!.password_should_be_at_least_six_characters;
                         }
                         return null;
                       },
@@ -172,17 +185,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   BounceInLeft(
                     child: CustomFormField(
-                      label: 'Password verification',
-                      hint: 'confirm password',
+                      label: AppLocalizations.of(context)!.password_verification,
+                      hint: AppLocalizations.of(context)!.confirm_password,
                       controller: viewModel.passwordVerificationController,
                       keyboardType: TextInputType.text,
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a confirmation password';
+                          return AppLocalizations.of(context)!.please_enter_a_confirmation_password;
                         }
                         if (text != viewModel.passwordController.text) {
-                          return 'Password does not match!';
+                          return AppLocalizations.of(context)!.password_does_not_match;
                         }
                         return null;
                       },
@@ -192,7 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account?',
+                        AppLocalizations.of(context)!.already_have_an_account,
                         style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
@@ -204,7 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               context, LoginScreen.routeName);
                         },
                         child: Text(
-                          'Sign in',
+                            AppLocalizations.of(context)!.sign_in,
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               decorationThickness: 2,
@@ -236,7 +249,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           .then((value) {
                         if (value != null) {
                           String buttonText =
-                              value == 'doctor' ? 'doctor' : 'patient';
+                              value == AppLocalizations.of(context)!.doctor ? AppLocalizations.of(context)!.doctor
+                                  : AppLocalizations.of(context)!.patient;
                           setState(() {
                             viewModel.roleController.text =
                                 value.toString(); // Explicit cast to string
@@ -248,7 +262,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Text(
                       chooseRoleButtonText, // Default text if not set
                       style: TextStyle(
-                        color: MyTheme.primaryLight,
+                        color: provider.isDarkMode()
+                            ? MyTheme.primaryDark
+                            : MyTheme.primaryLight,
                         fontSize: 24,
                         fontWeight: FontWeight.w600, // Adjust font size
                       ),
@@ -275,10 +291,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () {
                           createAccount();
                         },
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Color(0xff3660D9),
+                        child: Text(
+                            AppLocalizations.of(context)!.sign_up,
+                            style: TextStyle(
+                            color:  provider.isDarkMode()
+                                ? MyTheme.primaryDark
+                                : MyTheme.primaryLight,
                             fontSize: 28,
                             fontWeight: FontWeight.w600,
                           ),
@@ -301,8 +319,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Show a message or handle the scenario where the role is not chosen
       DialogUtils.showMessage(
         context,
-        'Please complete the missing fields!',
-        posActionName: 'Ok',
+        AppLocalizations.of(context)!.please_complete_the_missing_fields,
+        posActionName: AppLocalizations.of(context)!.ok,
       );
       return; // Exit the method early
     }

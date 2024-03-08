@@ -8,6 +8,10 @@ class Constant {
   static const String sources = '/v2/sources';
 
   static String? cashe = CasheHelper.getData('news');
+
+  static const String apiKeyChatBot = "AIzaSyANMbrnpnXKihPBEh3zsFJjLhVpicXSd18";
+  static const String geminiVisionModel = "gemini-pro-vision";
+  static const String geminiModel = "gemini-pro";
 }
 
 const String newsAPIBaseUrl = 'https://newsapi.org/v2';

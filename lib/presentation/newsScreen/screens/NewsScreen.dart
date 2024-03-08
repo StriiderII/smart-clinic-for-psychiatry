@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/domain/model/articlesModel/article.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/logic/cubit/NewCubit.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/logic/cubit/NewsState.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/logic/cubit/SearchCubit.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/screens/ArticleNewsScreen.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class NewsScreen extends StatefulWidget {
   static const String routeName = 'news_screen';
@@ -23,19 +26,23 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xff5078F2), Color(0xffEFE9F4)],
+            colors: provider.isDarkMode()
+                ? [Color(0xff5078F2), Color(0xff121212)]
+                : [Color(0xff5078F2), Color(0xffEFE9F4)],
           ),
         ),
         child: BlocProvider(
           create: (context) => NewsCubit()
-            ..getSources(NewsCubit.get(context).catergorieModel?.id ?? 'health'),
+            ..getSources(
+                NewsCubit.get(context).catergorieModel?.id ?? 'health'),
           child: BlocConsumer<NewsCubit, HomeState>(
             listener: (context, state) {
               if (state is HomeLoadindState) {
@@ -44,7 +51,7 @@ class _NewsScreenState extends State<NewsScreen> {
                   context,
                   'Error',
                   posActionName:
-                  'No internet connection, Please try again later',
+                      'No internet connection, Please try again later',
                   negActionName: 'OK',
                 );
               } else if (state is HomeSorcesSuccessState) {
@@ -59,17 +66,24 @@ class _NewsScreenState extends State<NewsScreen> {
               }
 
               List<Article> filteredList = cubit.articlesList.where((article) {
-                return article.title!.toLowerCase().contains(searchController.text.toLowerCase());
+                return article.title!
+                    .toLowerCase()
+                    .contains(searchController.text.toLowerCase());
               }).toList();
 
               return Column(
                 children: [
                   SizedBox(height: 100.h),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
-                      SizedBox(width: 125.w),
-                      Image.asset('assets/images/articles_font.png'),
+                      Text(
+                        AppLocalizations.of(context)!.articles,
+                        style: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            color: MyTheme.whiteColor),
+                      ),
                     ],
                   ),
                   SizedBox(height: 30.h),
@@ -77,20 +91,33 @@ class _NewsScreenState extends State<NewsScreen> {
                     width: 450.w,
                     height: 80.h,
                     padding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                     child: TextField(
                       controller: searchController,
                       style: TextStyle(
-                          fontSize: 20
+                        color: provider.isDarkMode()
+                            ? MyTheme.whiteColor
+                            : MyTheme.primaryDark,
+                        fontSize: 20,
                       ),
                       onChanged: (value) {
                         setState(() {});
                       },
                       decoration: InputDecoration(
-                        hintText: 'Search...',
-                        suffixIcon: Icon(Icons.search),
+                        hintStyle: TextStyle(
+                          color: provider.isDarkMode()
+                              ? MyTheme.whiteColor
+                              : MyTheme.primaryDark,
+                        ),
+                        hintText: AppLocalizations.of(context)!.search,
+                        suffixIcon: Icon(Icons.search,color:
+                        provider.isDarkMode()
+                            ? MyTheme.whiteColor
+                            : MyTheme.primaryDark,),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: provider.isDarkMode()
+                            ? MyTheme.primaryDark
+                            : MyTheme.whiteColor,
                         enabled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(50.0),
@@ -117,6 +144,7 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 }
+
 //ignore: must_be_immutable
 class SuccessNews extends StatelessWidget {
   SuccessNews(

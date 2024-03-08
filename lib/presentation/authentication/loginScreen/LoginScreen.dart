@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreen.dart';
@@ -11,6 +12,8 @@ import 'package:smart_clinic_for_psychiatry/presentation/common/components/custo
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'login screen';
@@ -25,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return BlocListener<LoginViewModel, LoginViewState>(
       listenWhen: (old, newState) {
         if (old is LoadingState && newState is! LoadingState) {
@@ -37,12 +41,12 @@ class _LoginScreenState extends State<LoginScreen> {
         switch (state) {
           case ErrorState():
             {
-              DialogUtils.showMessage(context, state.message ?? "",
-                  posActionName: 'Ok');
+              DialogUtils.showMessage(context, AppLocalizations.of(context)!.something_went_wrong,
+                  posActionName: AppLocalizations.of(context)!.ok);
             }
           case LoadingState():
             {
-              DialogUtils.showLoading(context, 'Loading..');
+              DialogUtils.showLoading(context, AppLocalizations.of(context)!.loading);
             }
 
           case LoginSuccessState():
@@ -62,12 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Logged In Successfully'),
-                  content:
-                      Text('Welcome back ${state.myUser.name}!',style:
-                        TextStyle(
-                          fontSize: 18
-                        ),),
+                  title: Text(AppLocalizations.of(context)!.logged_in_successfully),
+                  content: Text(
+                    '${AppLocalizations.of(context)!.welcome_back} ${state.myUser.name}!',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 );
               },
             );
@@ -78,7 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       bloc: viewModel,
       child: Scaffold(
-        backgroundColor: MyTheme.primaryLight,
+        backgroundColor: provider.isDarkMode()
+            ? MyTheme.primaryDark
+            : MyTheme.primaryLight,
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12),
@@ -86,10 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: 70.h,
+                  height: 100.h,
                 ),
                 BounceInDown(
-                  child: Image.asset('assets/images/signin_font.png'),
+                  child: Text(AppLocalizations.of(context)!.sign_in,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: MyTheme.whiteColor,
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold
+                  ),
+                  ),
                 ),
                 SizedBox(
                   height: 70.h,
@@ -99,14 +111,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome Back To Smart Clinic For Psychiatry',
+                        AppLocalizations.of(context)!.welcome_back_to_smart_clinic_for_psychiatry,
                         style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.w600,
                             color: MyTheme.whiteColor),
                       ),
                       Text(
-                        'Please sign in with your e-mail',
+                        AppLocalizations.of(context)!.please_sign_in_with_your_email,
                         style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w300,
@@ -120,18 +132,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 BounceInUp(
                   child: CustomFormField(
-                    label: 'Email',
-                    hint: 'Enter your email',
+                    label: AppLocalizations.of(context)!.email,
+                    hint: AppLocalizations.of(context)!.enter_your_email,
                     controller: viewModel.emailController,
                     validator: (text) {
                       if (text == null || text.trim().isEmpty) {
-                        return 'Please enter a valid e-mail';
+                        return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
                       }
                       bool emailValid = RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(text);
                       if (!emailValid) {
-                        return 'Please enter a valid email';
+                        return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
                       }
                       return null;
                     },
@@ -139,16 +151,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 BounceInUp(
                   child: CustomFormField(
-                    label: 'Password',
-                    hint: 'Enter your password',
+                    label: AppLocalizations.of(context)!.password,
+                    hint: AppLocalizations.of(context)!.enter_your_password,
                     controller: viewModel.passwordController,
                     secureText: true,
                     validator: (text) {
                       if (text == null || text.trim().isEmpty) {
-                        return 'Please enter a valid password';
+                        return AppLocalizations.of(context)!.please_enter_a_valid_password;
                       }
                       if (text.length < 6) {
-                        return 'Password should be at least 6 characters';
+                        return AppLocalizations.of(context)!.password_should_be_at_least_six_characters;
                       }
                       return null;
                     },
@@ -158,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Dont have an account?',
+                    AppLocalizations.of(context)!.dont_have_an_account,
                       style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w500,
@@ -170,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             context, RegisterScreen.routeName);
                       },
                       child: Text(
-                        'sign up',
+                          AppLocalizations.of(context)!.sign_up,
                         style: TextStyle(
                             decoration: TextDecoration.underline,
                             decorationThickness: 2,
@@ -186,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Forgot your password?',
+                    AppLocalizations.of(context)!.forgot_your_password,
                       style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w500,
@@ -198,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             context, ResetPasswordScreen.routeName);
                       },
                       child: Text(
-                        'reset password',
+                          AppLocalizations.of(context)!.reset_password,
                         style: TextStyle(
                             decoration: TextDecoration.underline,
                             decorationThickness: 2,
@@ -230,10 +242,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         login();
                       },
-                      child: const Text(
-                        'Sign In',
+                      child: Text(
+                          AppLocalizations.of(context)!.sign_in,
                         style: TextStyle(
-                          color: Color(0xff3660D9),
+                          color: provider.isDarkMode()
+                              ? MyTheme.primaryDark
+                              : MyTheme.primaryLight,
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
                         ),

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/domain/model/articlesModel/article.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/screens/WebView.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 
 
@@ -22,6 +24,7 @@ class ArticlesNewsWidget extends StatefulWidget {
 class _ArticlesNewsWidgetState extends State<ArticlesNewsWidget> {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -37,7 +40,9 @@ class _ArticlesNewsWidgetState extends State<ArticlesNewsWidget> {
         margin: const EdgeInsets.all(12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: MyTheme.whiteColor,
+          color:  provider.isDarkMode()
+              ? MyTheme.primaryDark
+              : MyTheme.whiteColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(

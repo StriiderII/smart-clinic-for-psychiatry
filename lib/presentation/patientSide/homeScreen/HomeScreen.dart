@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/screens/NewsScreen.dart';
@@ -10,7 +11,8 @@ import 'package:smart_clinic_for_psychiatry/presentation/patientSide/chatScreen/
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/servicesScreen/ServicesScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreen.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home_screen';
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return BlocBuilder<HomeViewModel, HomeScreenState>(
       bloc: viewModel,
       builder: (context, state) {
@@ -66,7 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         return Scaffold(
-          backgroundColor: MyTheme.whiteColor,
+          backgroundColor: provider.isDarkMode()
+            ? MyTheme.primaryDark
+            : MyTheme.whiteColor,
           bottomNavigationBar: ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -88,25 +93,25 @@ class _HomeScreenState extends State<HomeScreen> {
               tabs: [
                 GButton(
                   icon: selectedIndex == 0 ? FontAwesomeIcons.house : FontAwesomeIcons.house,
-                  text: 'Home',
+                    text: AppLocalizations.of(context)!.home,
                 ),
                 GButton(
                   icon: selectedIndex == 1 ? FontAwesomeIcons.newspaper : FontAwesomeIcons.newspaper,
-                  text: 'Article',
+                  text: AppLocalizations.of(context)!.articles,
                 ),
                 GButton(
                   icon: selectedIndex == 2 ? FontAwesomeIcons.rocketchat : FontAwesomeIcons.rocketchat,
-                  text: 'Chat',
+                  text: AppLocalizations.of(context)!.chat,
                 ),
                 GButton(
                   icon: selectedIndex == 3
                       ? FontAwesomeIcons.heart
                       : FontAwesomeIcons.heart,
-                  text: 'Tests',
+                  text: AppLocalizations.of(context)!.tests,
                 ),
                 GButton(
                   icon: selectedIndex == 4 ? Icons.settings : Icons.settings,
-                  text: 'Settings',
+                  text: AppLocalizations.of(context)!.settings,
                 ),
               ],
             ),

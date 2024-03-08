@@ -4,6 +4,7 @@ class Assets {
 
   static const String assetsImagesAssessment = 'assets/images/assessment.png';
   static const String assetsImagesSplash = 'assets/images/splash.json';
+  static const String imagesAiPhoto = 'assets/images/ai_photo.png';
   static const String imagesArticle = 'assets/images/article.png';
   static const String imagesArticlesFont = 'assets/images/articles_font.png';
   static const String imagesAssessment = 'assets/images/assessment.jpg';
@@ -14,6 +15,7 @@ class Assets {
   static const String imagesCalm = 'assets/images/calm.png';
   static const String imagesChangePasswordFont = 'assets/images/change_password_font.png';
   static const String imagesChat = 'assets/images/chat.png';
+  static const String imagesChatbotIcon = 'assets/images/chatbot_icon.jpg';
   static const String imagesConfirm = 'assets/images/confirm.png';
   static const String imagesDiastolic = 'assets/images/diastolic.png';
   static const String imagesDoctor = 'assets/images/doctor.png';
@@ -21,6 +23,7 @@ class Assets {
   static const String imagesDoctorFramed = 'assets/images/doctor_framed.png';
   static const String imagesEditProfileFont = 'assets/images/edit_profile_font.png';
   static const String imagesEditProfileIcon = 'assets/images/edit_profile_icon.png';
+  static const String imagesFindYourPatientLight = 'assets/images/find_your_patient_light.png';
   static const String imagesFindYourSpecialistLight = 'assets/images/find_your_specialist_light.png';
   static const String imagesFocus = 'assets/images/focus.png';
   static const String imagesHappy = 'assets/images/happy.png';
@@ -31,6 +34,7 @@ class Assets {
   static const String imagesIntroPage2 = 'assets/images/Intro_page2.png';
   static const String imagesIntroPage3 = 'assets/images/Intro_page3.png';
   static const String imagesLanguageFont = 'assets/images/language_font.png';
+  static const String imagesLoading = 'assets/images/loading.json';
   static const String imagesPatient = 'assets/images/patient.png';
   static const String imagesPatientFont = 'assets/images/patient_font.png';
   static const String imagesPatientFramed = 'assets/images/patient_framed.png';
@@ -39,6 +43,7 @@ class Assets {
   static const String imagesSettings = 'assets/images/settings.png';
   static const String imagesSettingsFont = 'assets/images/settings_font.png';
   static const String imagesSettingsPage = 'assets/images/settings_page.png';
+  static const String imagesSettingsPageDark = 'assets/images/settings_page_dark.png';
   static const String imagesSigninFont = 'assets/images/signin_font.png';
   static const String imagesSignupFont = 'assets/images/signup_font.png';
   static const String imagesSplash = 'assets/images/splash.png';

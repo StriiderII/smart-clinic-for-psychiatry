@@ -1,16 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
-  static const String routeName = 'chat_screen';
+  static const String routeName = 'chat screen';
 
-  @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }
