@@ -4,6 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/assessmentScreen/AssessmentTitle.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/assessmentScreen/Questions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AssessmentScreen extends StatefulWidget {
   const AssessmentScreen({super.key});
@@ -68,13 +69,13 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                     width: 0.90 * MediaQuery.of(context).size.width,
                     child: FadeInLeft(
                       child: Image(
-                        image: AssetImage('assets/images/assessment.jpg'),
+                        image: AssetImage('assets/images/assessment.png'),
                       ),
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 40),
                   Text(
-                    'Choose self-assessment test based on the following disorders',
+                    AppLocalizations.of(context)!.choose_self_assessment_test_based_on_the_following_disorders,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20.sp,
@@ -85,32 +86,32 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 20),
                   AssessmentTile(
-                    title: 'Depression',
-                    questions: DepressionQuestions.questions,
+                    title: AppLocalizations.of(context)!.depression,
+                    questions: DepressionQuestions.getQuestions(context),
                     colors: [MyTheme.primaryLight, MyTheme.backgroundButtonColor],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 60),
                   AssessmentTile(
-                    title: 'Anxiety',
-                    questions: AnxietyQuestions.questions,
+                    title: AppLocalizations.of(context)!.anxiety,
+                    questions: AnxietyQuestions.getQuestions(context),
                     colors: [MyTheme.primaryLight, MyTheme.backgroundButtonColor],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 60),
                   AssessmentTile(
-                    title: 'PTSD',
-                    questions: PTSDQuestions.questions,
+                    title: AppLocalizations.of(context)!.ptsd,
+                    questions: PTSDQuestions.getQuestions(context),
                     colors: [MyTheme.primaryLight, MyTheme.backgroundButtonColor],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 60),
                   AssessmentTile(
-                    title: 'Schizophrenia',
-                    questions: SchizophreniaQuestions.questions,
+                    title: AppLocalizations.of(context)!.schizophrenia,
+                    questions: SchizophreniaQuestions.getQuestions(context),
                     colors: [MyTheme.primaryLight, MyTheme.backgroundButtonColor],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 60),
                   AssessmentTile(
-                    title: 'Addiction',
-                    questions: AddictionQuestions.questions,
+                    title: AppLocalizations.of(context)!.addiction,
+                    questions: AddictionQuestions.getQuestions(context),
                     colors: [MyTheme.primaryLight, MyTheme.backgroundButtonColor],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height / 60),
@@ -125,13 +126,22 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.only(top: 80, left: 80),
+      padding: const EdgeInsets.only(top: 80),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             width: 5.w,
           ),
-          Image.asset('assets/images/assessment_font.png'),
+          Text(
+            textAlign: TextAlign.center,
+            AppLocalizations.of(context)!.assessment_test,
+            style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: MyTheme.primaryLight
+            ),
+          ),
         ],
       ),
     );

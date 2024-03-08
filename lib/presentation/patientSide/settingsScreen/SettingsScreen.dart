@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScreen/LoginScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreenViewModel.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/editProfile/EditProfileScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/language/LanguageScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/theme/ThemeScreen.dart';
-
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide//settingsScreen/theme/ThemeScreen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const String routeName = 'settings screen';
@@ -24,6 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return BlocListener<SettingsViewModel, SettingsViewState>(
       listenWhen: (old, newState) {
         if (old is LoadingState && newState is! LoadingState) {
@@ -37,11 +41,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           case ErrorState():
             {
               DialogUtils.showMessage(context, state.message ?? "",
-                  posActionName: 'Ok');
+                  posActionName: AppLocalizations.of(context)!.ok);
             }
           case LoadingState():
             {
-              DialogUtils.showLoading(context, 'Loading..');
+              DialogUtils.showLoading(
+                  context, AppLocalizations.of(context)!.loading);
             }
           case LogoutSuccessState():
             {
@@ -50,8 +55,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 builder: (BuildContext context) {
                   // Delayed navigation function
                   void delayedNavigation() {
-                    Future.delayed(Duration(seconds: 1), () {
-                      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                    Future.delayed(const Duration(seconds: 1), () {
+                      Navigator.pushReplacementNamed(
+                          context, LoginScreen.routeName);
                     });
                   }
 
@@ -59,13 +65,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   delayedNavigation();
 
                   return AlertDialog(
-                    title: Text('Logged out'),
-                    content: Text('Logged out successfully'),
+                    content: Text(
+                      AppLocalizations.of(context)!.logged_out_successfully,
+                      style: TextStyle(fontSize: 20),
+                    ),
                   );
                 },
               );
             }
-
 
           case InitialState():
         }
@@ -74,19 +81,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Scaffold(
         body: Stack(
           children: [
-            Image.asset(
-              'assets/images/settings_page.png',
-              fit: BoxFit.fill,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+            provider.isDarkMode()
+                ? Image.asset(
+                    'assets/images/settings_page_dark.png',
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    height: double.infinity,
+                  )
+                : Image.asset(
+                    'assets/images/settings_page.png',
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
             Positioned(
-              top: 30,
+              top: 80,
               left: 112,
-              child: Image.asset(
-                'assets/images/settings_font.png',
-                width: 180.w,
-                height: 180.h,
+              child: Text(
+                AppLocalizations.of(context)!.settings,
+                style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                    color: MyTheme.whiteColor),
               ),
             ),
             Padding(
@@ -96,7 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildSettingsButton(
-                    title: 'Edit profile',
+                    title: AppLocalizations.of(context)!.edit_profile,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -111,7 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     endIndent: 35,
                   ),
                   _buildSettingsButton(
-                    title: 'Language',
+                    title: AppLocalizations.of(context)!.language,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -126,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     endIndent: 35,
                   ),
                   _buildSettingsButton(
-                    title: 'Theme',
+                    title: AppLocalizations.of(context)!.theme,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -141,14 +157,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     endIndent: 35,
                   ),
                   _buildSettingsButton(
-                    title: 'About',
+                    title: AppLocalizations.of(context)!.about,
                     onTap: () {},
                   ),
                   const SizedBox(height: 100),
                   ElevatedButton(
                     onPressed: () async {
-                      logout();
-                      // Handle successful logout here (e.g., navigate to login)
+                      // Show logout confirmation dialog
+                      bool logoutConfirmed = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!
+                                .logout_confirmation),
+                            content: Text(AppLocalizations.of(context)!
+                                .are_you_sure_you_want_to_logout),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(
+                                      false); // Return false if cancel is pressed
+                                },
+                                child:
+                                    Text(AppLocalizations.of(context)!.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(
+                                      true); // Return true if yes is pressed
+                                },
+                                child: Text(AppLocalizations.of(context)!.yes),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      // Check if logout is confirmed
+                      if (logoutConfirmed == true) {
+                        logout();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -160,7 +208,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     child: Text(
-                      'Log out',
+                      AppLocalizations.of(context)!.log_out,
                       style: TextStyle(
                         fontSize: 24.sp,
                         color: Colors.white,
@@ -181,13 +229,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildSettingsButton(
-      {required String title, required VoidCallback onTap}) {
+
+      {required String title, required VoidCallback onTap,   }) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return ListTile(
+
       title: Row(
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 24.sp),
+            style: TextStyle(fontSize: 24.sp,
+              color: provider.isDarkMode()
+                  ? MyTheme.whiteColor
+                  : MyTheme.primaryDark,
+            ),
           ),
           const Spacer(),
           const Icon(Icons.navigate_next),

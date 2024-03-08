@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:smart_clinic_for_psychiatry/data/database/firebase/FireBaseUtils.dart';
 import 'package:smart_clinic_for_psychiatry/data/datasourceContracts/AuthenticationDataSource.dart';
@@ -170,33 +167,4 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
     }
     return null;
   }
-
-  @override
-  Future<MyUser?> changeUserPicture(String picturePath) async {
-    try {
-      // Get the current user
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception("User not logged in");
-      }
-
-      // Upload the picture to Firebase Storage
-      final storageRef = FirebaseStorage.instance.ref().child('user_pictures').child(user.uid);
-      final uploadTask = storageRef.putFile(File(picturePath));
-      final downloadUrl = await uploadTask.then((snapshot) => snapshot.ref.getDownloadURL());
-
-      // Update the user's picture in Firestore
-      final docRef =
-      FirebaseFirestore.instance.collection(MyUser.collectionName).doc(user.uid);
-      await docRef.update({'picture': downloadUrl});
-
-      // Retrieve and return the updated user object
-      final retrievedUser = await FirebaseUtils.readUserFromFireStore(user.uid);
-      return retrievedUser;
-    } catch (e) {
-      print("Error changing user picture: $e");
-      return null;
-    }
-  }
 }
-

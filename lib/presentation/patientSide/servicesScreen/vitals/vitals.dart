@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Vitals extends StatelessWidget {
   final List<String> imagePath = [
@@ -23,8 +24,17 @@ class Vitals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> additionalImageTexts = [
+      AppLocalizations.of(context)!.heart_beat,
+      AppLocalizations.of(context)!.systolic,
+      AppLocalizations.of(context)!.diastolic,
+      AppLocalizations.of(context)!.steps,
+      AppLocalizations.of(context)!.blood_oxygen,
+      AppLocalizations.of(context)!.temperature,
+    ];
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,14 +58,27 @@ class Vitals extends StatelessWidget {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(right: 50, top: 8),
-                      child: Text(
-                        imageTexts[index],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      margin: EdgeInsets.only(right: 30, top: 8),
+                      child: Column(
+                        children: [
+                          Text(
+                            additionalImageTexts[index],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            imageTexts[index],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -68,3 +91,4 @@ class Vitals extends StatelessWidget {
     );
   }
 }
+*/

@@ -1,62 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DepressionQuestions {
-  static const List<String> questions = [
-    'Are you having thoughts that you would be better off dead, or of hurting yourself?',
-    'Are you having trouble concentrating on things such as reading the newspaper or watching TV?',
-    'Are you feeling bad about yourself (ex. feel like a failure or constantly let your family down)?',
-    'Do you have a poor appetite or are you overeating?',
-    'Are you feeling tired or having little energy?',
-    'Are you having trouble falling or staying asleep, or sleeping too much?',
-    'Are you feeling down, depressed, or hopeless?',
-    'Do you have little interest or pleasure in doing things?',
-  ];
+  static List<String> getQuestions(BuildContext context) {
+    return [
+      AppLocalizations.of(context)!.are_you_having_thoughts_that_you_would_be_better_off_dead_or_of_hurting_yourself,
+      AppLocalizations.of(context)!.are_you_having_trouble_concentrating_on_things_such_as_reading_the_newspaper_or_watching_tv,
+      AppLocalizations.of(context)!.are_you_feeling_bad_about_yourself_ex_feel_like_a_failure_or_constantly_let_your_family_down,
+      AppLocalizations.of(context)!.do_you_have_a_poor_appetite_or_are_you_overeating,
+      AppLocalizations.of(context)!.are_you_feeling_tired_or_having_little_energy,
+      AppLocalizations.of(context)!.are_you_having_trouble_falling_or_staying_asleep_or_sleeping_too_much,
+      AppLocalizations.of(context)!.are_you_feeling_down_depressed_or_hopeless,
+      AppLocalizations.of(context)!.do_you_have_little_interest_or_pleasure_in_doing_things,
+    ];
+  }
 }
 
 class AnxietyQuestions {
-  static const List<String> questions = [
-    'Are you feeling nervous, anxious, or on edge?',
-    'Are you feeling unable to stop or control worrying?',
-    'Are you worrying too much about different things?',
-    'Are you having trouble relaxing?',
-    'Are you so restless that it is hard to sit still?',
-    'Are you feeling easily annoyed or irritable?',
-    'Are you feeling as if something awful might happen?',
-  ];
+  static List<String> getQuestions(BuildContext context) {
+    return [
+      AppLocalizations.of(context)!.are_you_feeling_nervous_anxious_or_on_edge,
+      AppLocalizations.of(context)!.are_you_feeling_unable_to_stop_or_control_worrying,
+      AppLocalizations.of(context)!.are_you_worrying_too_much_about_different_things,
+      AppLocalizations.of(context)!.are_you_having_trouble_relaxing,
+      AppLocalizations.of(context)!.are_you_so_restless_that_it_is_hard_to_sit_still,
+      AppLocalizations.of(context)!.are_you_feeling_easily_annoyed_or_irritable,
+      AppLocalizations.of(context)!.are_you_feeling_as_if_something_awful_might_happen,
+    ];
+  }
 }
 
 class PTSDQuestions {
-  static const List<String> questions = [
-    'Are you having nightmares about a distressing event(s) or thought about the event(s) when you did not want to?',
-    'Are you trying hard not to think about a distressing event(s) or went out of your way to avoid situations that reminded you of the event(s)?',
-    'Do you feel constantly on guard, watchful, or easily startled?',
-    'Do you feel numb or detached from people, activities, or your surroundings?',
-    'Do you feel guilty or unable to stop blaming yourself or others for a distressing event(s) or any problems the event(s) may have caused?',
-  ];
+  static List<String> getQuestions(BuildContext context) {
+    return [
+      AppLocalizations.of(context)!.are_you_having_nightmares_about_a_distressing_events_or_thought_about_the_events_when_you_did_not_want_to,
+      AppLocalizations.of(context)!.are_you_trying_hard_not_to_think_about_a_distressing_events_or_went_out_of_your_way_to_avoid_situations_that_reminded_you_of_the_events,
+      AppLocalizations.of(context)!.do_you_feel_constantly_on_guard_watchful_or_easily_startled,
+      AppLocalizations.of(context)!.do_you_feel_numb_or_detached_from_people_activities_or_your_surroundings,
+      AppLocalizations.of(context)!.do_you_feel_guilty_or_unable_to_stop_blaming_yourself_or_others_for_a_distressing_events_or_any_problems_the_events_may_have_caused,
+    ];
+  }
 }
 
 class SchizophreniaQuestions {
-  static const List<String> questions = [
-    'Are you experiencing any brain fog?',
-    'Are you struggling to remember to eat or drink water?',
-    'Are your thoughts jumbled or are you unable to think clearly?',
-    "Are you having trouble seeing things or are you seeing things that aren't there?",
-    'Do you feel extremely tired?',
-    'Are the happy thoughts speeding up your thought process?',
-    'Are the sad thoughts slowing down your thought process?',
-    'Are you having any grandiose thoughts?',
-  ];
+  static List<String> getQuestions(BuildContext context) {
+    return [
+      AppLocalizations.of(context)!.are_you_experiencing_any_brain_fog,
+      AppLocalizations.of(context)!.are_you_struggling_to_remember_to_eat_or_drink_water,
+      AppLocalizations.of(context)!.are_your_thoughts_jumbled_or_are_you_unable_to_think_clearly,
+      AppLocalizations.of(context)!.are_you_having_trouble_seeing_things_or_are_you_seeing_things_that_arent_there,
+      AppLocalizations.of(context)!.do_you_feel_extremely_tired,
+      AppLocalizations.of(context)!.are_the_happy_thoughts_speeding_up_your_thought_process,
+      AppLocalizations.of(context)!.are_the_sad_thoughts_slowing_down_your_thought_process,
+      AppLocalizations.of(context)!.are_you_having_any_grandiose_thoughts,
+    ];
+  }
 }
 
 class AddictionQuestions {
-  static const List<String> questions = [
-    'Are you using substances to numb any physical or emotional pain?',
-    'Do you feel like you should cut down on your substance use?',
-    'Are you feeling guilty about using substances?',
-    'Is anyone annoying you by criticizing your substance use?',
-    'Do you feel that your substance use significantly decreases your ability to function?',
-    'Are you using substances as soon as you wake up in the morning?',
-  ];
+  static List<String> getQuestions(BuildContext context) {
+    return [
+      AppLocalizations.of(context)!.are_you_using_substances_to_numb_any_physical_or_emotional_pain,
+      AppLocalizations.of(context)!.do_you_feel_like_you_should_cut_down_on_your_substance_use,
+      AppLocalizations.of(context)!.are_you_feeling_guilty_about_using_substances,
+      AppLocalizations.of(context)!.is_anyone_annoying_you_by_criticizing_your_substance_use,
+      AppLocalizations.of(context)!.do_you_feel_that_your_substance_use_significantly_decreases_your_ability_to_function,
+      AppLocalizations.of(context)!.are_you_using_substances_as_soon_as_you_wake_up_in_the_morning
+    ];
+  }
 }
 
-const style = TextStyle(fontSize: 15, color: Colors.black);
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: DepressionQuestions.getQuestions(context).length,
+        itemBuilder: (context, index) {
+          return Text(
+            DepressionQuestions.getQuestions(context)[index],
+            style: TextStyle(fontSize: 15, color: Colors.black),
+          );
+        },
+      ),
+    );
+  }
+}

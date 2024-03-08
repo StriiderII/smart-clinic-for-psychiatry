@@ -1,16 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class ChatScreenDoctor extends StatefulWidget {
+class ChatScreenDoctor extends StatelessWidget {
   const ChatScreenDoctor({super.key});
-  static const String routeName = 'chat_screen_doctor';
+  static const String routeName = 'chat screen doctor';
 
-  @override
-  State<ChatScreenDoctor> createState() => _ChatScreenDoctorState();
-}
-
-class _ChatScreenDoctorState extends State<ChatScreenDoctor> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }

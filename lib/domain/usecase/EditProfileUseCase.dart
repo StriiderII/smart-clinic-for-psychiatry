@@ -12,7 +12,4 @@ class EditProfileUseCase {
   Future<MyUser?> invoke(String newName, String newPhone) {
     return repository.updateUserInfo(newName, newPhone);
   }
-  Future<MyUser?> changeUserPicture(String picturePath) {
-    return repository.changeUserPicture(picturePath);
-  }
 }

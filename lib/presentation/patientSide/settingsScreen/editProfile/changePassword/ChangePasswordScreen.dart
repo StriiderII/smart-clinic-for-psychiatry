@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/di/di.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/editProfile/changePassword/ChangePasswordViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -22,6 +25,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return BlocListener<ChangePasswordViewModel, ChangePasswordViewState>(
       listenWhen: (old, newState) {
         if (old is LoadingState && newState is! LoadingState) {
@@ -34,12 +38,12 @@ class _ChangePasswordState extends State<ChangePassword> {
         switch (state) {
           case ErrorState():
             {
-              DialogUtils.showMessage(context, state.message ?? "",
-                  posActionName: 'Ok');
+              DialogUtils.showMessage(context, AppLocalizations.of(context)!.something_went_wrong,
+                  posActionName:AppLocalizations.of(context)!.ok);
             }
           case LoadingState():
             {
-              DialogUtils.showLoading(context, 'Loading..');
+              DialogUtils.showLoading(context, AppLocalizations.of(context)!.loading);
             }
           case ChangePasswordSuccessState():
             {
@@ -54,9 +58,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                   // Call the delayed navigation function
                   delayedNavigation();
 
-                  return const AlertDialog(
+                  return  AlertDialog(
                     content: Text(
-                      'password changed successfully',
+                      AppLocalizations.of(context)!.password_changed_successfully,
                       style: TextStyle(fontSize: 20),
                     ),
                   );
@@ -69,7 +73,9 @@ class _ChangePasswordState extends State<ChangePassword> {
       },
       bloc: viewModel,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor:  provider.isDarkMode()
+            ? MyTheme.primaryDark
+            : MyTheme.whiteColor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -88,8 +94,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                       Navigator.of(context).pop();
                     },
                   ),
-                  SizedBox(width: 55.w),
-                  Image.asset('assets/images/change_password_font.png'),
+                  SizedBox(width: 40.w),
+                  Text(AppLocalizations.of(context)!.change_password,
+                    style:TextStyle(
+                      color: MyTheme.primaryLight,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),),
                 ],
               ),
               SizedBox(
@@ -102,9 +113,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(left: 10),
-                        child: const Text('Email',
+                        child: Text(AppLocalizations.of(context)!.email,
                             style: TextStyle(
                               fontSize: 17,
+                              color:  provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
                               fontWeight: FontWeight.bold,
                             )),
                       ),
@@ -112,9 +126,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                         width: 350.w,
                         height: 50.h,
                         child: TextFormField(
+                          style: TextStyle(
+                            color:  provider.isDarkMode()
+                                ? MyTheme.primaryDark
+                                : MyTheme.primaryDark,
+                          ),
                           controller: viewModel.currentEmailController,
                           textAlign: TextAlign.start,
-                          cursorHeight: 32.h,
+                          cursorHeight: 20.h,
                           cursorWidth: 1,
                           cursorColor: const Color(0xff3660D9),
                           decoration: InputDecoration(
@@ -139,7 +158,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ],
                   ),
                   buildPasswordTextField(
-                      'Current Password',
+                      AppLocalizations.of(context)!.current_password,
                       viewModel.currentPasswordController,
                       _obscureCurrentPassword,
                           () {
@@ -148,7 +167,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         });
                       }),
                   buildPasswordTextField(
-                      'New Password',
+                      AppLocalizations.of(context)!.new_password,
                       viewModel.newPasswordController,
                       _obscureNewPassword,
                           () {
@@ -157,7 +176,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         });
                       }),
                   buildPasswordTextField(
-                      'Confirm Password',
+                      AppLocalizations.of(context)!.confirm_new_password,
                       viewModel.confirmPasswordController,
                       _obscureConfirmPassword,
                           () {
@@ -183,7 +202,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ),
                 child: Text(
-                  'Save changes',
+                  AppLocalizations.of(context)!.save_changes,
                   style: TextStyle(
                     fontSize: 24.sp,
                     color: Colors.white,
@@ -198,6 +217,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   Widget buildPasswordTextField(String label, TextEditingController controller, bool obscureText, VoidCallback onPressed) {
+    var provider = Provider.of<AppConfigProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -205,9 +225,12 @@ class _ChangePasswordState extends State<ChangePassword> {
           margin: const EdgeInsets.only(left: 10),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
+              color:  provider.isDarkMode()
+                  ? MyTheme.whiteColor
+                  : MyTheme.primaryDark,
             ),
           ),
         ),
@@ -253,6 +276,22 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   void changePassword() {
+    // Check if any of the text fields are empty
+    if (viewModel.currentPasswordController.text.isEmpty ||
+        viewModel.newPasswordController.text.isEmpty ||
+        viewModel.confirmPasswordController.text.isEmpty) {
+      // Display an error message
+      DialogUtils.showMessage(
+        context,
+        AppLocalizations.of(context)!.please_complete_the_missing_fields,
+        posActionName: AppLocalizations.of(context)!.ok,
+      );
+      return; // Exit the method early
+    }
+
+    // If all fields are filled, proceed with changing the password
     viewModel.changePassword();
   }
+
 }
+

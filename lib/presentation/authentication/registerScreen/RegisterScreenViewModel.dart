@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dart';
 import 'package:smart_clinic_for_psychiatry/domain/usecase/RegisterUseCase.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @injectable
 class RegisterViewModel extends Cubit<RegisterViewState> {
@@ -26,6 +27,7 @@ class RegisterViewModel extends Cubit<RegisterViewState> {
   RegisterViewModel(this.registerUseCase) : super(InitialState());
 
   void createAccount() async {
+
     try {
       emit(LoadingState());
       var MyUser = await registerUseCase.invoke(
@@ -57,6 +59,7 @@ class ErrorState extends RegisterViewState {
 class LoadingState extends RegisterViewState {}
 
 class RegisterSuccessState extends RegisterViewState {
+
   MyUser? myUser;
   RegisterSuccessState(this.myUser);
 }
