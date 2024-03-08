@@ -36,7 +36,7 @@ class _NewsScreenState extends State<NewsScreen> {
             end: Alignment.bottomCenter,
             colors: provider.isDarkMode()
                 ? [Color(0xff5078F2), Color(0xff121212)]
-                : [Color(0xff5078F2), Color(0xffEFE9F4)],
+                : [Color(0xff5078F2), Color(0xffFFFFFF)],
           ),
         ),
         child: BlocProvider(

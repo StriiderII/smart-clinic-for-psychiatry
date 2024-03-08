@@ -8,6 +8,7 @@ import 'package:smart_clinic_for_psychiatry/domain/model/userModel/UserModel.dar
 @Injectable(as: AuthenticationDataSource)
 class AuthenticationOnlineDataSource extends AuthenticationDataSource {
   FirebaseUtils firebaseUtils;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @factoryMethod
   AuthenticationOnlineDataSource(this.firebaseUtils);
@@ -25,16 +26,28 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
       final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      // Create MyUser object with the provided information, including role
+      // Create a complete user data map
+      final userData = {
+        'uid': credential.user!.uid,
+        'email': email,
+        'name': name,
+        'phone': phone,
+        'role': role,
+      };
+
+      // Save complete user data to Firestore using FirebaseUtils or directly
+      await _firestore
+          .collection('users')
+          .doc(credential.user!.uid)
+          .set(userData);
+
+      // Create MyUser object with the provided information
       MyUser myUser = MyUser(
           id: credential.user?.uid ?? '',
           name: name,
           email: email,
           phone: phone,
           role: role);
-
-      // Save user data to Firestore using FirebaseUtils
-      await FirebaseUtils.addUserToFireStore(myUser);
 
       return myUser; // Return the created user object
     } catch (e) {
@@ -50,25 +63,37 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      // Retrieve user data from Firestore using FirebaseUtils
-      var user =
-          await FirebaseUtils.readUserFromFireStore(credential.user?.uid ?? '');
+      // Retrieve user data from Firestore using FirebaseUtils or directly
+      final userData = await _firestore
+          .collection('users')
+          .doc(credential.user!.uid)
+          .get();
 
-      // Check if user data is retrieved successfully
-      if (user != null) {
-        // Update the user object with the retrieved data, including the role
-        user.role =
-            user.role ?? ''; // Assign an empty string if role is not present
-        return user;
-      } else {
-        return null; // Login failed if user data not retrieved
+      if (!userData.exists) {
+        return null; // Login failed if user data not found
       }
+
+      final userMap = userData.data() as Map<String, dynamic>;
+
+      // Check if all fields are present and assign empty strings if missing
+      final name = userMap['name'] ?? '';
+      final phone = userMap['phone'] ?? '';
+      final role = userMap['role'] ?? '';
+
+      // Create MyUser object with retrieved or default values
+      MyUser user = MyUser(
+          id: userMap['uid'],
+          name: name,
+          email: userMap['email'],
+          phone: phone,
+          role: role);
+
+      return user;
     } catch (e) {
       print("Error logging in: $e");
       return null;
     }
   }
-
   @override
   Future<MyUser?> logout() async {
     try {
@@ -111,7 +136,7 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
       if (updateMap.isEmpty) {
         // No changes, return the current user without update
         final retrievedUser =
-            await FirebaseUtils.readUserFromFireStore(user.uid);
+        await FirebaseUtils.readUserFromFireStore(user.uid);
         return retrievedUser;
       }
 
