@@ -68,7 +68,7 @@ class ChatPage extends StatelessWidget {
                     receiverEmail,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 50,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
