@@ -34,7 +34,7 @@ void main() async {
   await CasheHelper.init();
 
   String? cache = CasheHelper.getData('news');
-  String startWidget = cache != null ? LoginScreen.routeName : LoginScreen.routeName;
+  String startWidget = cache != null ? SplashScreen.routeName : SplashScreen.routeName;
 
   runApp(
     ChangeNotifierProvider(

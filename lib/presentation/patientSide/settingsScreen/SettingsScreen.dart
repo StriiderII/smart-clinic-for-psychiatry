@@ -7,6 +7,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScr
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreenViewModel.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/about/AboutScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/editProfile/EditProfileScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/language/LanguageScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide//settingsScreen/theme/ThemeScreen.dart';
@@ -67,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   return AlertDialog(
                     content: Text(
                       AppLocalizations.of(context)!.logged_out_successfully,
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     ),
                   );
                 },
@@ -158,7 +159,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _buildSettingsButton(
                     title: AppLocalizations.of(context)!.about,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutScreen(),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 100),
                   ElevatedButton(
