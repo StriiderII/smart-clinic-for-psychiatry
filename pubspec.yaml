@@ -54,7 +54,6 @@ dependencies:
   flutter_screenutil: ^5.9.0
   google_sign_in: ^6.2.1
   flutter_launcher_icons: ^0.13.1
-  calendar_timeline: ^1.1.2
   flutter_slidable: ^3.0.1
   cloud_firestore: ^4.15.5
   firebase_core: ^2.25.4
@@ -87,7 +86,6 @@ dependencies:
   image_picker: ^1.0.7
   permission_handler: ^11.3.0
   device_info_plus: ^9.1.2
-  localize_and_translate: ^5.1.2
   intl_utils: ^2.8.7
   health: ^9.0.1
   flutter_local_notifications: ^16.3.3

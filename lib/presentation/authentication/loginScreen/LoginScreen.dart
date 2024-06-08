@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
                       }
                       return null;
-                    },
+                    }, inputFormatters: [],
                   ),
                 ),
                 BounceInUp(
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return AppLocalizations.of(context)!.password_should_be_at_least_six_characters;
                       }
                       return null;
-                    },
+                    }, inputFormatters: [],
                   ),
                 ),
                 Row(

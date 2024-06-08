@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +28,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   var formKey = GlobalKey<FormState>();
 
-  late String chooseRoleButtonText =
-      AppLocalizations.of(context)!.choose_role; // Initializing chooseRoleButtonText
+  late String chooseRoleButtonText = AppLocalizations.of(context)!
+      .choose_role; // Initializing chooseRoleButtonText
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +45,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       listener: (context, state) {
         switch (state) {
           case ErrorState():
-            DialogUtils.showMessage(context, AppLocalizations.of(context)!.something_went_wrong, posActionName: AppLocalizations.of(context)!.ok);
+            DialogUtils.showMessage(
+                context, AppLocalizations.of(context)!.something_went_wrong,
+                posActionName: AppLocalizations.of(context)!.ok);
             break;
           case LoadingState():
-            DialogUtils.showLoading(context, AppLocalizations.of(context)!.loading);
+            DialogUtils.showLoading(
+                context, AppLocalizations.of(context)!.loading);
             break;
           case RegisterSuccessState():
-          // Show success message for 1 second, then navigate automatically
+            // Show success message for 1 second, then navigate automatically
             Future.delayed(const Duration(seconds: 1), () {
               Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             });
-            DialogUtils.showMessage(context, AppLocalizations.of(context)!.registered_successfully);
+            DialogUtils.showMessage(
+                context, AppLocalizations.of(context)!.registered_successfully);
             break;
           case InitialState():
             break;
         }
       },
-
       bloc: viewModel,
       child: Scaffold(
-        backgroundColor: provider.isDarkMode()
-            ? MyTheme.primaryDark
-            : MyTheme.primaryLight,
+        backgroundColor:
+            provider.isDarkMode() ? MyTheme.primaryDark : MyTheme.primaryLight,
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -78,13 +81,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 70.h,
                   ),
                   BounceInDown(
-                    child: Text(AppLocalizations.of(context)!.sign_up,
+                    child: Text(
+                      AppLocalizations.of(context)!.sign_up,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: MyTheme.whiteColor,
                           fontSize: 60,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -95,14 +98,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          AppLocalizations.of(context)!.welcome_to_our_vibrant_community_of_smart_clinic_for_psychiatry,
+                          AppLocalizations.of(context)!
+                              .welcome_to_our_vibrant_community_of_smart_clinic_for_psychiatry,
                           style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w600,
                               color: MyTheme.whiteColor),
                         ),
                         Text(
-                          AppLocalizations.of(context)!.feel_free_to_sign_up_and_join_us_on_our_exciting_journey,
+                          AppLocalizations.of(context)!
+                              .feel_free_to_sign_up_and_join_us_on_our_exciting_journey,
                           style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w300,
@@ -122,10 +127,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.name,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return AppLocalizations.of(context)!.please_enter_a_valid_username;
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_username;
                         }
                         return null;
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(
+                            r'[a-zA-Z\s]')), // Allow only alphabetic characters and spaces
+                      ],
                     ),
                   ),
                   BounceInLeft(
@@ -136,16 +146,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_e_mail;
                         }
                         bool emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0.9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(text);
                         if (!emailValid) {
-                          return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_e_mail;
                         }
                         return null;
                       },
+                      inputFormatters: [],
                     ),
                   ),
                   BounceInLeft(
@@ -154,12 +167,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hint: AppLocalizations.of(context)!.phone_numbers,
                       controller: viewModel.phoneController,
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            11), // Limit to 11 characters
+                        FilteringTextInputFormatter
+                            .digitsOnly, // Allow only digits
+                      ],
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return AppLocalizations.of(context)!.please_enter_a_valid_phone_number;
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_phone_number;
                         }
-                        if (text.length < 11) {
-                          return AppLocalizations.of(context)!.phone_should_be_at_least_eleven_characters;
+                        if (text.length != 11) {
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_phone_number;
+                        }
+                        if (!(text.startsWith('010') ||
+                            text.startsWith('011') ||
+                            text.startsWith('012') ||
+                            text.startsWith('015'))) {
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_phone_number;
                         }
                         return null;
                       },
@@ -174,31 +202,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return AppLocalizations.of(context)!.please_enter_a_valid_password;
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_valid_password;
                         }
                         if (text.length < 6) {
-                          return AppLocalizations.of(context)!.password_should_be_at_least_six_characters;
+                          return AppLocalizations.of(context)!
+                              .password_should_be_at_least_six_characters;
                         }
                         return null;
                       },
+                      inputFormatters: [],
                     ),
                   ),
                   BounceInLeft(
                     child: CustomFormField(
-                      label: AppLocalizations.of(context)!.password_verification,
+                      label:
+                          AppLocalizations.of(context)!.password_verification,
                       hint: AppLocalizations.of(context)!.confirm_password,
                       controller: viewModel.passwordVerificationController,
                       keyboardType: TextInputType.text,
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return AppLocalizations.of(context)!.please_enter_a_confirmation_password;
+                          return AppLocalizations.of(context)!
+                              .please_enter_a_confirmation_password;
                         }
                         if (text != viewModel.passwordController.text) {
-                          return AppLocalizations.of(context)!.password_does_not_match;
+                          return AppLocalizations.of(context)!
+                              .password_does_not_match;
                         }
                         return null;
                       },
+                      inputFormatters: [],
                     ),
                   ),
                   Row(
@@ -217,7 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               context, LoginScreen.routeName);
                         },
                         child: Text(
-                            AppLocalizations.of(context)!.sign_in,
+                          AppLocalizations.of(context)!.sign_in,
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               decorationThickness: 2,
@@ -237,8 +272,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const EdgeInsets.symmetric(
                             vertical: 15), // Adjust padding
                       ),
-                      shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.0),
                         ),
@@ -249,7 +283,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           .then((value) {
                         if (value != null) {
                           String buttonText =
-                              value == AppLocalizations.of(context)!.doctor ? AppLocalizations.of(context)!.doctor
+                              value == AppLocalizations.of(context)!.doctor
+                                  ? AppLocalizations.of(context)!.doctor
                                   : AppLocalizations.of(context)!.patient;
                           setState(() {
                             viewModel.roleController.text =
@@ -292,9 +327,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           createAccount();
                         },
                         child: Text(
-                            AppLocalizations.of(context)!.sign_up,
-                            style: TextStyle(
-                            color:  provider.isDarkMode()
+                          AppLocalizations.of(context)!.sign_up,
+                          style: TextStyle(
+                            color: provider.isDarkMode()
                                 ? MyTheme.primaryDark
                                 : MyTheme.primaryLight,
                             fontSize: 28,
@@ -325,11 +360,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return; // Exit the method early
     }
 
+    // Check if the full name field is empty or contains only whitespace
+    if (viewModel.nameController.text.trim().isEmpty) {
+      DialogUtils.showMessage(
+        context,
+        AppLocalizations.of(context)!.please_complete_the_missing_fields,
+        posActionName: AppLocalizations.of(context)!.ok,
+      );
+      return; // Exit the method early
+    }
+
     // Check if the form is valid
     if (formKey.currentState?.validate() == false) return;
 
     // If the role is chosen and the form is valid, proceed with creating the account
     viewModel.createAccount();
   }
-
 }

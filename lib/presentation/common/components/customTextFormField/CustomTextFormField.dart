@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 
 typedef Validator = String? Function(String?);
@@ -10,17 +11,20 @@ class CustomFormField extends StatefulWidget {
   final bool secureText;
   final TextEditingController? controller;
   final int lines;
+  final Validator? validator;
+  final List<TextInputFormatter> inputFormatters;
 
   const CustomFormField({
-    super.key,
+    Key? key,
     required this.label,
     required this.hint,
     this.keyboardType = TextInputType.text,
     this.secureText = false,
     this.controller,
     this.lines = 1,
-    required String? Function(dynamic text) validator,
-  });
+    this.validator,
+    this.inputFormatters = const [],
+  }) : super(key: key);
 
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
@@ -28,6 +32,7 @@ class CustomFormField extends StatefulWidget {
 
 class _CustomFormFieldState extends State<CustomFormField> {
   bool _obscureText = true;
+  String? _errorText;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -35,20 +40,10 @@ class _CustomFormFieldState extends State<CustomFormField> {
     });
   }
 
-  String? _passwordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-    if (!value.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password must contain at least one symbol';
-    }
-    return null;
+  void _validateField(String? value) {
+    setState(() {
+      _errorText = widget.validator?.call(value);
+    });
   }
 
   @override
@@ -58,8 +53,18 @@ class _CustomFormFieldState extends State<CustomFormField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            widget.label,
+            style: TextStyle(
+              color: MyTheme.whiteColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
           TextFormField(
-            validator: widget.secureText ? _passwordValidator : null,
+            onChanged: _validateField,
+            validator: widget.validator,
             cursorHeight: 25,
             cursorWidth: 1,
             cursorRadius: const Radius.circular(20),
@@ -68,14 +73,26 @@ class _CustomFormFieldState extends State<CustomFormField> {
             minLines: widget.lines,
             maxLines: widget.lines,
             keyboardType: widget.keyboardType,
-            style: TextStyle(color: MyTheme.whiteColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w300), // Keep text color same
-            cursorColor: MyTheme.whiteColor, // Keep cursor color same
+            inputFormatters: [
+              ...widget.inputFormatters,
+              if (widget.keyboardType == TextInputType.emailAddress)
+                FilteringTextInputFormatter.allow(RegExp(
+                    r'[@a-zA-Z0-9.]')), // Allow @, alphabetic characters, numbers, and "."
+              LengthLimitingTextInputFormatter(
+                  widget.keyboardType == TextInputType.emailAddress
+                      ? 64
+                      : 32), // Limit characters based on type
+            ],
+            style: TextStyle(
+              color: MyTheme.whiteColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w300,
+            ),
+            cursorColor: MyTheme.whiteColor,
             decoration: InputDecoration(
               hintText: widget.hint,
               hintStyle: TextStyle(
-                color:  MyTheme.whiteColor, // Keep hint color same
+                color: MyTheme.whiteColor,
                 fontSize: 18,
                 fontWeight: FontWeight.w300,
               ),
@@ -87,23 +104,39 @@ class _CustomFormFieldState extends State<CustomFormField> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                    color: MyTheme.whiteColor), // Keep border color same
+                  color: MyTheme.whiteColor,
+                ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                    color: MyTheme.whiteColor), // Keep border color same
+                  color: MyTheme.whiteColor,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                    color: MyTheme.whiteColor), // Keep border color same
+                  color: MyTheme.whiteColor,
+                ),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: MyTheme.redColor,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: MyTheme.redColor,
+                ),
+              ),
+              errorText: _errorText,
               suffixIcon: widget.secureText
                   ? IconButton(
                       icon: Icon(
                         _obscureText ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.grey, // Keep icon color same
+                        color: Colors.grey,
                       ),
                       onPressed: _togglePasswordVisibility,
                     )

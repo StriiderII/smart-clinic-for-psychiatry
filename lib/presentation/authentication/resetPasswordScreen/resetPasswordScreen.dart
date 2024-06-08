@@ -144,7 +144,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         return AppLocalizations.of(context)!.please_enter_a_valid_e_mail;
                       }
                       return null;
-                    },
+                    }, inputFormatters: [],
                   ),
                 ),
                 Row(
