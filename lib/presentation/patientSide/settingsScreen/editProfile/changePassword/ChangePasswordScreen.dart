@@ -56,9 +56,9 @@ class _ChangePasswordState extends State<ChangePassword> {
   void _validateCurrentPassword() {
     final value = viewModel.currentPasswordController.text;
     setState(() {
-      if (value.isEmpty) {
+      if (value.isEmpty || value.length < 6) {
         _currentPasswordError = AppLocalizations.of(context)!.please_enter_a_valid_password;
-      } else if (!RegExp(r'^(?=.*[A-Z])(?=.*\W)[A-Za-z\d\W]{8,}$').hasMatch(value)) {
+      } else if (!RegExp(r'^(?=.*[A-Z])(?=.*\W)[A-Za-z\d\W]{6,}$').hasMatch(value)) {
         _currentPasswordError = AppLocalizations.of(context)!.please_enter_a_valid_password;
       } else {
         _currentPasswordError = null;
@@ -69,9 +69,9 @@ class _ChangePasswordState extends State<ChangePassword> {
   void _validateNewPassword() {
     final value = viewModel.newPasswordController.text;
     setState(() {
-      if (value.isEmpty) {
+      if (value.isEmpty || value.length < 6) {
         _newPasswordError = AppLocalizations.of(context)!.please_enter_a_valid_password;
-      } else if (!RegExp(r'^(?=.*[A-Z])(?=.*\W)[A-Za-z\d\W]{8,}$').hasMatch(value)) {
+      } else if (!RegExp(r'^(?=.*[A-Z])(?=.*\W)[A-Za-z\d\W]{6,}$').hasMatch(value)) {
         _newPasswordError = AppLocalizations.of(context)!.please_enter_a_valid_password;
       } else {
         _newPasswordError = null;
@@ -82,7 +82,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   void _validateConfirmPassword() {
     final value = viewModel.confirmPasswordController.text;
     setState(() {
-      if (value.isEmpty) {
+      if (value.isEmpty || value.length < 6) {
         _confirmPasswordError = AppLocalizations.of(context)!.please_enter_a_valid_password;
       } else if (value != viewModel.newPasswordController.text) {
         _confirmPasswordError = AppLocalizations.of(context)!.password_does_not_match;

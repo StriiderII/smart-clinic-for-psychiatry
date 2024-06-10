@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:smart_clinic_for_psychiatry/data/Constant/Constant.dart';
 import 'package:smart_clinic_for_psychiatry/domain/model/articlesModel/ArticlesModel.dart';
