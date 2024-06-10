@@ -7,6 +7,7 @@ import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScr
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/dialogUtils/dialogUtils.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/SettingsScreenViewModel.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/about/AboutScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/editProfile/EditProfileScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/language/LanguageScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/theme/ThemeScreen.dart';
@@ -158,7 +159,14 @@ class _SettingsScreenDoctorState extends State<SettingsScreenDoctor> {
                   ),
                   _buildSettingsButton(
                     title: AppLocalizations.of(context)!.about,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutScreenDoctor(),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 100),
                   ElevatedButton(

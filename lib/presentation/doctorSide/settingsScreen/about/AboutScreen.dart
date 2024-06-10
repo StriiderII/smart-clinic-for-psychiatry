@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/about/Content.dart';
 import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
-class AboutScreen extends StatefulWidget {
-  static const String routeName = 'about screen';
+class AboutScreenDoctor extends StatefulWidget {
+  static const String routeName = 'about screen doctor';
   @override
-  _AboutScreenState createState() => _AboutScreenState();
+  _AboutScreenDoctorState createState() => _AboutScreenDoctorState();
 }
 
-class _AboutScreenState extends State<AboutScreen> {
+class _AboutScreenDoctorState extends State<AboutScreenDoctor> {
   late PageController _pageController = PageController();
   int _currentPage = 0;
 

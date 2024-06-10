@@ -145,7 +145,12 @@
   "password_should_have_uppercase": "Password should have at least one uppercase letter.",
   "password_should_have_special_character": "Password should have at least one special character.",
   "patients_list": "Patients List",
-  "email_not_found": "Email not found!"
+  "email_not_found": "Email not found!",
+  "the_smart_clinic_app_is_a_mobile_application_developed_to_offer_mental_health_care_and_support_for_patients_and_psychiatrists_this_app_allows_users_to_log_in_as_either_a_patient_or_a_doctor_and_access_various_features_chat_bot_ai_chat_between_doctor_and_patient_ptsd_schizophrenia_addiction_and_anxiety_and_mental_health_articles_the_app_is_built_using_flutter_a_cross_platform_framework_for_native_app_development_and_firebase_a_cloud_based_backend_platform_additionally_the_app_integrates_various_apis_and_libraries_for_stress_measurement_the_primary_goal_of_the_app_is_to_enhance_the_quality_of_mental_health_care_and_improve_communication_between_patients_and_doctors": "The Smart Clinic App is a mobile application developed to offer mental health care and support for patients and psychiatrists. This app allows users to log in as either a patient or a doctor and access various features, chat bot AI, chat between doctor and patient, PTSD, schizophrenia, addiction and anxiety and mental health articles. The app is built using Flutter, a cross-platform framework for native app development, and Firebase, a cloud-based backend platform. Additionally, the app integrates various APIs and libraries for stress measurement. The primary goal of the app is to enhance the quality of mental health care and improve communication between patients and doctors.",
+  "acknowledgement" : "ACKNOWLEDGEMENT",
+  "meet_our_team" : "Meet Our Team",
+  "under_supervision" : "Under Supervision",
+  "associate_professor" : "Associate Professor:"
 
 
 
