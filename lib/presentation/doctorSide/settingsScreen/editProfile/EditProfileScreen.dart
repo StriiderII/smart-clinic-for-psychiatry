@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,9 @@ import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScre
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
+
 class EditProfileScreen extends StatefulWidget {
-  static const String routeName = 'edit profile';
+  static const String routeName = 'edit profile doctor';
   const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final picture = await FirebaseUtils.getUserProfileImage(uId);
     setState(() {
       _userPicture = picture;
-      print('Retrieved name: $_userPicture'); // Log the retrieved name
+      print('Retrieved picture: $_userPicture'); // Log the retrieved picture
     });
   }
 
@@ -131,17 +133,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             provider.isDarkMode()
                 ? Image.asset(
-                    'assets/images/settings_page_dark.png',
-                    fit: BoxFit.fill,
-                    width: double.infinity,
-                    height: double.infinity,
-                  )
+              'assets/images/settings_page_dark.png',
+              fit: BoxFit.fill,
+              width: double.infinity,
+              height: double.infinity,
+            )
                 : Image.asset(
-                    'assets/images/settings_page.png',
-                    fit: BoxFit.fill,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
+              'assets/images/settings_page.png',
+              fit: BoxFit.fill,
+              width: double.infinity,
+              height: double.infinity,
+            ),
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -163,7 +165,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       SizedBox(width: 60.w),
                       Text(
-                        textAlign: TextAlign.center,
                         AppLocalizations.of(context)!.edit_profile,
                         style: TextStyle(
                             color: MyTheme.whiteColor,
@@ -182,8 +183,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         if (temp != null) {
                           // Upload the selected image to Firebase Storage
                           String? imageUrl =
-                              await ImageFunctions.uploadImageToFirebaseStorage(
-                                  temp);
+                          await ImageFunctions.uploadImageToFirebaseStorage(
+                              temp);
                           if (imageUrl != null) {
                             setState(() {
                               pickedImage = temp;
@@ -204,9 +205,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               : NetworkImage(_userPicture!),
                           child: _userPicture == null
                               ? const Icon(
-                                  Icons.person,
-                                  size: 80,
-                                )
+                            Icons.person,
+                            size: 80,
+                          )
                               : null,
                         ),
                         if (editingProfile)
@@ -253,53 +254,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 55.h,
                         child: editingProfile
                             ? TextFormField(
-                                style: TextStyle(
-                                  color: provider.isDarkMode()
-                                      ? MyTheme.whiteColor
-                                      : MyTheme.primaryDark,
-                                ),
-                                controller: viewModel.newNameController,
-                                textAlign: TextAlign.start,
-                                cursorHeight: 28.h,
-                                cursorWidth: 1,
-                                cursorColor: const Color(0xff3660D9),
-                                decoration: InputDecoration(
-                                  hintStyle: TextStyle(
-                                    fontSize: 18,
-                                    color: provider.isDarkMode()
-                                        ? MyTheme.whiteColor
-                                        : MyTheme.primaryDark,
-                                  ),
-                                  hintText:
-                                      AppLocalizations.of(context)!.full_name,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: const BorderSide(
-                                        color: Color(0xff3660D9)),
-                                  ),
-                                ),
-                              )
+                          style: TextStyle(
+                            color: provider.isDarkMode()
+                                ? MyTheme.whiteColor
+                                : MyTheme.primaryDark,
+                          ),
+                          controller: viewModel.newNameController,
+                          textAlign: TextAlign.start,
+                          cursorHeight: 28.h,
+                          cursorWidth: 1,
+                          cursorColor: const Color(0xff3660D9),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[a-zA-Z ]")),
+                            LengthLimitingTextInputFormatter(32),
+                          ],
+                          decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                              fontSize: 18,
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                            ),
+                            hintText:
+                            AppLocalizations.of(context)!.full_name,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: Color(0xff3660D9)),
+                            ),
+                          ),
+                        )
                             : Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, top: 7),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade400,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    color: Colors.grey
-                                        .shade400, // You can set the color of the border here
-                                    width:
-                                        1.0, // You can adjust the width of the border here
-                                  ),
-                                ),
-                                child: Text(
-                                  userName ?? '',
-                                  style: const TextStyle(fontSize: 24),
-                                ),
-                              ),
+                          padding:
+                          const EdgeInsets.only(left: 10, top: 7),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: Colors.grey
+                                  .shade400, // You can set the color of the border here
+                              width:
+                              1.0, // You can adjust the width of the border here
+                            ),
+                          ),
+                          child: Text(
+                            userName ?? '',
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 20.h,
@@ -329,53 +335,69 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 55.h,
                         child: editingProfile
                             ? TextFormField(
-                                style: TextStyle(
-                                  color: provider.isDarkMode()
-                                      ? MyTheme.whiteColor
-                                      : MyTheme.primaryDark,
-                                ),
-                                controller: viewModel.newPhoneController,
-                                textAlign: TextAlign.start,
-                                cursorHeight: 28.h,
-                                cursorWidth: 1,
-                                cursorColor: const Color(0xff3660D9),
-                                decoration: InputDecoration(
-                                  hintStyle: TextStyle(
-                                    fontSize: 18,
-                                    color: provider.isDarkMode()
-                                        ? MyTheme.whiteColor
-                                        : MyTheme.primaryDark,
-                                  ),
-                                  hintText: AppLocalizations.of(context)!
-                                      .phone_numbers,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: const BorderSide(
-                                        color: Color(0xff3660D9)),
-                                  ),
-                                ),
-                              )
+                          style: TextStyle(
+                            color: provider.isDarkMode()
+                                ? MyTheme.whiteColor
+                                : MyTheme.primaryDark,
+                          ),
+                          controller: viewModel.newPhoneController,
+                          textAlign: TextAlign.start,
+                          cursorHeight: 28.h,
+                          cursorWidth: 1,
+                          cursorColor: const Color(0xff3660D9),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")),
+                            LengthLimitingTextInputFormatter(11),
+                            FilteringTextInputFormatter.deny(
+                                RegExp(r'[^0-9]')),
+                          ],
+                          decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                              fontSize: 18,
+                              color: provider.isDarkMode()
+                                  ? MyTheme.whiteColor
+                                  : MyTheme.primaryDark,
+                            ),
+                            hintText: AppLocalizations.of(context)!
+                                .phone_numbers,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: Color(0xff3660D9)),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value != null &&
+                                value.isNotEmpty &&
+                                !['010', '011', '012', '015']
+                                    .contains(value.substring(0, 3))) {
+                              return 'Phone number must start with 010, 011, 012, or 015';
+                            }
+                            return null;
+                          },
+                        )
                             : Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, top: 7),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade400,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    color: Colors.grey
-                                        .shade400, // You can set the color of the border here
-                                    width:
-                                        1.0, // You can adjust the width of the border here
-                                  ),
-                                ),
-                                child: Text(
-                                  userPhone ?? '',
-                                  style: const TextStyle(fontSize: 24),
-                                ),
-                              ),
+                          padding:
+                          const EdgeInsets.only(left: 10, top: 7),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: Colors.grey
+                                  .shade400, // You can set the color of the border here
+                              width:
+                              1.0, // You can adjust the width of the border here
+                            ),
+                          ),
+                          child: Text(
+                            userPhone ?? '',
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -413,7 +435,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                   ),
-
                   ElevatedButton(
                     onPressed: () {
                       if (editingProfile) {
@@ -426,12 +447,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         // Toggle to editing mode
                         setState(() {
                           editingProfile = true;
+                          // Initialize controllers with current values
+                          viewModel.newNameController.text = userName ?? '';
+                          viewModel.newPhoneController.text = userPhone ?? '';
                         });
                       }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          editingProfile ? Colors.green : MyTheme.primaryLight,
+                      editingProfile ? Colors.green : MyTheme.primaryLight,
                       elevation: 8,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 70, vertical: 15),
@@ -481,6 +505,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void updateUserInfo() {
+    if (viewModel.newNameController.text.trim().isEmpty) {
+      viewModel.newNameController.text = userName ?? '';
+    }
+    if (viewModel.newPhoneController.text.trim().isEmpty) {
+      viewModel.newPhoneController.text = userPhone ?? '';
+    }
+
     viewModel.updateUserInfo();
   }
 }
+
+

@@ -100,7 +100,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
               filled: true,
               fillColor: Colors.transparent,
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+              const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
@@ -134,12 +134,12 @@ class _CustomFormFieldState extends State<CustomFormField> {
               errorText: _errorText,
               suffixIcon: widget.secureText
                   ? IconButton(
-                      icon: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.grey,
-                      ),
-                      onPressed: _togglePasswordVisibility,
-                    )
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+                onPressed: _togglePasswordVisibility,
+              )
                   : null,
             ),
             controller: widget.controller,

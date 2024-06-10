@@ -202,18 +202,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return AppLocalizations.of(context)!
-                              .please_enter_a_valid_password;
+                          return AppLocalizations.of(context)!.please_enter_a_valid_password;
                         }
                         if (text.length < 6) {
-                          return AppLocalizations.of(context)!
-                              .password_should_be_at_least_six_characters;
+                          return AppLocalizations.of(context)!.password_should_be_at_least_six_characters;
+                        }
+                        bool hasUppercase = text.contains(RegExp(r'[A-Z]'));
+                        bool hasSpecialCharacter = text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+                        if (!hasUppercase) {
+                          return AppLocalizations.of(context)!.password_should_have_uppercase;
+                        }
+                        if (!hasSpecialCharacter) {
+                          return AppLocalizations.of(context)!.password_should_have_special_character;
                         }
                         return null;
                       },
                       inputFormatters: [],
                     ),
                   ),
+
                   BounceInLeft(
                     child: CustomFormField(
                       label:

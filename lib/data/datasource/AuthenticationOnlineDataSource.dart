@@ -163,33 +163,36 @@ class AuthenticationOnlineDataSource extends AuthenticationDataSource {
     }
   }
 
+
   @override
   Future<MyUser?> changePassword(String currentEmail, String currentPassword,
       String newPassword, String confirmPassword) async {
     try {
       // Check if newPassword matches confirmPassword
       if (newPassword != confirmPassword) {
-        throw Exception("New password and confirm password do not match");
+        throw Exception("New password and confirmation do not match.");
       }
 
       // Get the user object
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        throw Exception("User not logged in");
+        throw Exception("User not logged in.");
       }
 
       // Re-authenticate the user with their current email and password
-      final credential = await EmailAuthProvider.credential(
+      final credential = EmailAuthProvider.credential(
           email: currentEmail, password: currentPassword);
       await user.reauthenticateWithCredential(credential);
 
       // Update the password on Firebase Authentication
       await user.updatePassword(newPassword);
 
-      // Inform the user about successful password change
+      // Retrieve user data to return
+      return await FirebaseUtils.readUserFromFireStore(user.uid);
     } catch (e) {
       print("Error changing password: $e");
+      return null;
     }
-    return null;
   }
+
 }

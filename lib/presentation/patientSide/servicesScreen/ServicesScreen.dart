@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/chatBot/screens/ChatBotScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/chatScreen/ChatScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/servicesScreen/appBar/app_bar.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/servicesScreen/emoji/emoj.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/servicesScreen/vitals/vitals.dart';
@@ -58,7 +59,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 SizedBox(height: 50),
                 GestureDetector(
                   onTap: () {
-                    print('amogus');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ),
+                    );
                   },
                   child: Stack(
                     children: [
@@ -74,8 +80,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         child: Column(
                           children: [
                             Text(
-                              AppLocalizations.of(context)!
-                                  .find_your_specialist,
+                              AppLocalizations.of(context)!.find_your_specialist,
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 40.sp,
@@ -98,20 +103,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     ],
                   ),
                 ),
-                /*      Text(
-                  AppLocalizations.of(context)!.vitals,
-                  style: GoogleFonts.poppins(
-                    fontSize: 30.sp,
-                    color: provider.isDarkMode()
-                        ? MyTheme.whiteColor
-                        : MyTheme.primaryDark,
-                  ),
-                ),*/
-                /* Vitals(),*/
-
-                SizedBox(
-                  height: 50.h,
-                ),
+                SizedBox(height: 50.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -19,14 +19,22 @@ class ChangePasswordViewModel extends Cubit<ChangePasswordViewState> {
   void changePassword() async {
     try {
       emit(LoadingState());
+
+      // Ensure passwords match before calling the use case
+      if (newPasswordController.text != confirmPasswordController.text) {
+        emit(ErrorState('New password and confirmation do not match.'));
+        return;
+      }
+
       var myUser = await changePasswordUseCase.invoke(
         currentEmailController.text,
         currentPasswordController.text,
         newPasswordController.text,
         confirmPasswordController.text,
       );
+
       if (myUser == null) {
-        emit(ErrorState('password changed successfully'));
+        emit(ErrorState('Incorrect email or password.'));
       } else {
         emit(ChangePasswordSuccessState(myUser));
       }
@@ -34,6 +42,9 @@ class ChangePasswordViewModel extends Cubit<ChangePasswordViewState> {
       emit(ErrorState(e.toString()));
     }
   }
+
+
+
 }
 
 sealed class ChangePasswordViewState {}
@@ -48,6 +59,6 @@ class ErrorState extends ChangePasswordViewState {
 class LoadingState extends ChangePasswordViewState {}
 
 class ChangePasswordSuccessState extends ChangePasswordViewState {
-  MyUser myUser;
+  MyUser? myUser;
   ChangePasswordSuccessState(this.myUser);
 }

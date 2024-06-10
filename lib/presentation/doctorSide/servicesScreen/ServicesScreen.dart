@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/chatBot/screens/ChatBotScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/chatScreen/ChatScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/servicesScreen/appBar/app_bar.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/servicesScreen/emoji/emoj.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -57,35 +58,38 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 SizedBox(height: 50),
                 GestureDetector(
                   onTap: () {
-                    print('amogus');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreenDoctor(),
+                      ),
+                    );
                   },
                   child: Stack(
                     children: [
-                      SizedBox(
+                      Image.asset(
+                        'assets/images/find_your_specialist_light.png',
                         width: MediaQuery.of(context).size.width,
-                        child: Image.asset(
-                          'assets/images/find_your_patient_light.png',
-                          fit: BoxFit.fitWidth,
-                        ),
+                        fit: BoxFit.fitWidth,
                       ),
                       Positioned(
-                        top: 40,
+                        top: 20,
                         left: 0,
-                        right: 0,
+                        right: 120,
                         child: Column(
                           children: [
                             Text(
-                              AppLocalizations.of(context)!.find_your_patients,
+                              AppLocalizations.of(context)!.find_your_specialist,
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
-                                fontSize: 38.sp,
+                                fontSize: 40.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             Text(
                               AppLocalizations.of(context)!
-                                  .choose_a_patient_to_help_from_our_large_patients_profiles,
+                                  .choose_a_doctor_to_help_you_from_our_large_doctors_profiles,
                               textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
@@ -95,33 +99,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                           ],
                         ),
                       ),
-                      Positioned(
-                        top: MediaQuery.of(context).size.height *
-                            0.4, // Adjust this value as needed
-                        left: 0,
-                        right: 0,
-                        child: Image.asset(
-                          'assets/images/ai_photo.png',
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
                     ],
                   ),
                 ),
-                /*      Text(
-                  AppLocalizations.of(context)!.vitals,
-                  style: GoogleFonts.poppins(
-                    fontSize: 30.sp,
-                    color: provider.isDarkMode()
-                        ? MyTheme.whiteColor
-                        : MyTheme.primaryDark,
-                  ),
-                ),*/
-                /* Vitals(),*/
-
-                SizedBox(
-                  height: 50.h,
-                ),
+                SizedBox(height: 50.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

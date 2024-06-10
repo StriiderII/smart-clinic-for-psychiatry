@@ -137,12 +137,16 @@
   "moderate" : "Moderate",
   "low" : "Low",
   "please_focus_on_yourself_and_give_your_self_some_time_to_meditate_and_relax" : "Please focus on yourself and give your self some time to meditate and relax",
-  "keep_meditating_regularly_and_eat_healthy_you_are_just_few_days_away_from_perfect_mental_health" : "Keep meditating regularly and eat healthy.\\nYou are just few days away from perfect mental health",
-  "your_health_seems_good_enough_Keep_it_up" : "Your health seems good enough.\\nKeep it up!!",
+  "keep_meditating_regularly_and_eat_healthy_you_are_just_few_days_away_from_perfect_mental_health" : "Keep meditating regularly and eat healthy.\nYou are just few days away from perfect mental health",
+  "your_health_seems_good_enough_Keep_it_up" : "Your health seems good enough.\nKeep it up!!",
   "talk_with_your_ai" : "Talk with\nyour Ai",
   "talk_with_your_ai_to_help_you_with_anything_anytime_anywhere" : "Talk with your Ai to help you with\nanything, anytime, anywhere.",
   "doctors_list" : "Doctors List",
-  "patients_list" : "Patients List"
+  "password_should_have_uppercase": "Password should have at least one uppercase letter.",
+  "password_should_have_special_character": "Password should have at least one special character.",
+  "patients_list": "Patients List",
+  "email_not_found": "Email not found!"
+
 
 
 }

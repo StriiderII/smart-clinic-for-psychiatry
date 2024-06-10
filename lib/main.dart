@@ -10,23 +10,22 @@ import 'package:smart_clinic_for_psychiatry/presentation/authentication/loginScr
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/registerScreen/RegisterScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/authentication/resetPasswordScreen/resetPasswordScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/chatScreen/ChatScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/SettingsScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/chatScreen/ChatScreen.dart' as DoctorChat;
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/homeScreen/HomeScreen.dart' as DoctorHome;
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/SettingsScreen.dart' as DoctorSettings;
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/logic/cubit/NewCubit.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/newsScreen/screens/NewsScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/onBoardScreen/onBoardScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/patientSide/assessmentScreen/AssessmentScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/patientSide/chatScreen/ChatScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreen.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/chatScreen/ChatScreen.dart' as PatientChat;
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/homeScreen/HomeScreen.dart' as PatientHome;
+import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/SettingsScreen.dart' as PatientSettings;
 import 'package:smart_clinic_for_psychiatry/presentation/splashScreen/SplashScreen.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/userRoleScreen/UserRoleScreen.dart';
 import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 import 'firebase_options.dart';
 import 'presentation/newsScreen/logic/cubit/SearchCubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,16 +35,15 @@ void main() async {
   String? cache = CasheHelper.getData('news');
   String startWidget = cache != null ? SplashScreen.routeName : SplashScreen.routeName;
 
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppConfigProvider(), // Create AppConfigProvider here
-      child: MyApp(
-        startWidget: startWidget,
-      ),
-    ),
-  );
   configureDependencies();
   Bloc.observer = MyBlocObserver();
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AppConfigProvider(),
+      child: MyApp(startWidget: startWidget),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -60,7 +58,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<SearchCubit>(
           create: (context) => SearchCubit(),
         ),
-        BlocProvider(
+        BlocProvider<NewsCubit>(
           create: (context) => NewsCubit(),
         ),
       ],
@@ -70,24 +68,24 @@ class MyApp extends StatelessWidget {
             designSize: const Size(430, 932),
             minTextAdapt: true,
             splitScreenMode: true,
-            child: MaterialApp(
+            builder: (context, child) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Smart Clinic For Psychiatry',
               routes: {
                 SplashScreen.routeName: (_) => const SplashScreen(),
                 OnBoardingScreen.routeName: (_) => const OnBoardingScreen(),
                 UserRoleScreen.routeName: (_) => const UserRoleScreen(),
-                HomeScreen.routeName: (_) => const HomeScreen(),
-                HomeScreenDoctor.routeName: (_) => const HomeScreenDoctor(),
+                PatientHome.HomeScreen.routeName: (_) => const PatientHome.HomeScreen(),
+                DoctorHome.HomeScreenDoctor.routeName: (_) => const DoctorHome.HomeScreenDoctor(),
                 NewsScreen.routeName: (_) => const NewsScreen(),
-                SettingsScreen.routeName: (context) => const SettingsScreen(),
-                SettingsScreenDoctor.routeName: (context) => const SettingsScreenDoctor(),
-                AssessmentScreen.routeName: (context) => const AssessmentScreen(),
-                ChatScreen.routeName: (context) =>   const ChatScreen(),
-                ChatScreenDoctor.routeName: (context) =>   const ChatScreenDoctor(),
-                RegisterScreen.routeName: (context) =>  const RegisterScreen(),
-                LoginScreen.routeName: (context) =>  const LoginScreen(),
-                ResetPasswordScreen.routeName: (context) => const ResetPasswordScreen(),
+                PatientSettings.SettingsScreen.routeName: (_) => const PatientSettings.SettingsScreen(),
+                DoctorSettings.SettingsScreenDoctor.routeName: (_) => const DoctorSettings.SettingsScreenDoctor(),
+                AssessmentScreen.routeName: (_) => const AssessmentScreen(),
+                PatientChat.ChatScreen.routeName: (_) => const PatientChat.ChatScreen(),
+                DoctorChat.ChatScreenDoctor.routeName: (_) => const DoctorChat.ChatScreenDoctor(),
+                RegisterScreen.routeName: (_) => const RegisterScreen(),
+                LoginScreen.routeName: (_) => const LoginScreen(),
+                ResetPasswordScreen.routeName: (_) => const ResetPasswordScreen(),
               },
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,

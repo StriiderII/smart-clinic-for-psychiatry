@@ -9,9 +9,9 @@ class FirebaseUtils {
     return FirebaseFirestore.instance
         .collection(MyUser.collectionName)
         .withConverter<MyUser>(
-            fromFirestore: (snapshot, options) =>
-                MyUser.fromFireStore(snapshot.data()),
-            toFirestore: (user, options) => user.toFireStore());
+        fromFirestore: (snapshot, options) =>
+            MyUser.fromFireStore(snapshot.data()),
+        toFirestore: (user, options) => user.toFireStore());
   }
 
   static Future<void> addUserToFireStore(MyUser myUser) {
@@ -21,6 +21,13 @@ class FirebaseUtils {
   static Future<MyUser?> readUserFromFireStore(String uId) async {
     var querySnapshot = await getUsersCollection().doc(uId).get();
     return querySnapshot.data();
+  }
+
+  static Future<bool> checkIfEmailExists(String email) async {
+    var querySnapshot = await getUsersCollection()
+        .where('email', isEqualTo: email)
+        .get();
+    return querySnapshot.docs.isNotEmpty;
   }
 
   static Future<String?> getUserName(String uId) async {
@@ -54,6 +61,4 @@ class FirebaseUtils {
       return null;
     }
   }
-
-
 }
