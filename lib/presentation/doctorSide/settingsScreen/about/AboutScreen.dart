@@ -4,11 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_clinic_for_psychiatry/presentation/common/components/appTheme/my_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_clinic_for_psychiatry/presentation/patientSide/settingsScreen/about/Content.dart';
+import 'package:smart_clinic_for_psychiatry/presentation/doctorSide/settingsScreen/about/Content.dart';
 import 'package:smart_clinic_for_psychiatry/provider/app_config_provider.dart';
 
 class AboutScreenDoctor extends StatefulWidget {
-  static const String routeName = 'about screen doctor';
+  static const String routeName = 'about screen Doctor';
   @override
   _AboutScreenDoctorState createState() => _AboutScreenDoctorState();
 }
